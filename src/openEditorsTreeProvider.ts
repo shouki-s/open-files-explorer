@@ -28,7 +28,7 @@ export class OpenEditorsTreeProvider implements vscode.TreeDataProvider<OpenEdit
 		return Promise.resolve([]);
 	}
 
-	private async getRootItems(): Promise<OpenEditorItem[]> {
+	private getRootItems(): OpenEditorItem[] {
 		const workspaceFolders = vscode.workspace.workspaceFolders;
 
 		if (!workspaceFolders || workspaceFolders.length === 0) {
@@ -36,17 +36,17 @@ export class OpenEditorsTreeProvider implements vscode.TreeDataProvider<OpenEdit
 			return [];
 		}
 
-		return Promise.all(workspaceFolders.map(async folder =>
+		return workspaceFolders.map(folder =>
 			new OpenEditorItem(
 				folder.uri,
 				vscode.TreeItemCollapsibleState.Expanded,
 				true,
-				await this.getWorkspaceFolderItems(folder.uri.fsPath)
+				this.getWorkspaceFolderItems(folder.uri.fsPath)
 			)
-		));
+		);
 	}
 
-	private async getWorkspaceFolderItems(workspaceRoot: string): Promise<OpenEditorItem[]> {
+	private getWorkspaceFolderItems(workspaceRoot: string): OpenEditorItem[] {
 		const fileTree = this.buildFileTree(workspaceRoot);
 		return this.createTreeStructure(fileTree);
 	}
