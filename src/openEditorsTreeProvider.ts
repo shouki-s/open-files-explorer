@@ -29,16 +29,40 @@ export class OpenEditorsTreeProvider implements vscode.TreeDataProvider<OpenEdit
 	}
 
 	private getRootItems(): Thenable<OpenEditorItem[]> {
-		const workspaceRoot = vscode.workspace.workspaceFolders?.[0]?.uri.fsPath;
-		if (!workspaceRoot) {
-			console.log('No workspace root found');
+		const workspaceFolders = vscode.workspace.workspaceFolders;
+
+		if (!workspaceFolders || workspaceFolders.length === 0) {
+			console.log('No workspace folders found');
 			return Promise.resolve([]);
 		}
 
+		const rootItems: OpenEditorItem[] = [];
+		
+		workspaceFolders.forEach(async folder => {
+			const folderPath = folder.uri.fsPath;
+			const folderName = folder.name;
+			
+			const children = await this.getWorkspaceFolderItems(folderPath);
+			if (children.length > 0) {
+				const folderItem = new OpenEditorItem(
+					folderName,
+					vscode.TreeItemCollapsibleState.Expanded,
+					true,
+					undefined,
+					children
+				);
+				rootItems.push(folderItem);
+			}
+		});
+
+		return Promise.resolve(rootItems);
+	}
+
+	private async getWorkspaceFolderItems(workspaceRoot: string): Promise<OpenEditorItem[]> {
 		const fileTree: { [key: string]: OpenEditorItem[] } = {};
 		
 		// デバッグ用のログ
-		console.log('Workspace root:', workspaceRoot);
+		console.log('Processing workspace folder:', workspaceRoot);
 		console.log('Tab groups:', vscode.window.tabGroups.all);
 
 		// 開いているタブをフォルダ構造に整理
@@ -46,6 +70,12 @@ export class OpenEditorsTreeProvider implements vscode.TreeDataProvider<OpenEdit
 			group.tabs.forEach(tab => {
 				if (tab.input instanceof vscode.TabInputText) {
 					const filePath = tab.input.uri.fsPath;
+					
+					// このワークスペースフォルダに属するファイルのみを処理
+					if (!filePath.startsWith(workspaceRoot)) {
+						return;
+					}
+
 					const relativePath = path.relative(workspaceRoot, filePath);
 					const parts = relativePath.split(path.sep);
 					
@@ -93,13 +123,11 @@ export class OpenEditorsTreeProvider implements vscode.TreeDataProvider<OpenEdit
 		// フォルダツリーを構築
 		const rootItems: OpenEditorItem[] = [];
 		const processFolder = (folderPath: string, children: OpenEditorItem[]): OpenEditorItem => {
-			// 開いているエディタのパスのみを考慮して、単一のフォルダを持つ場合の処理
 			const nonEmptyChildren = children.filter(child => {
-				// フォルダの場合、その中に実際のファイルが含まれているかチェック
 				if (child.isFolder) {
 					return child.children && child.children.some(grandChild => !grandChild.isFolder);
 				}
-				return true; // ファイルの場合はそのまま含める
+				return true;
 			});
 
 			if (nonEmptyChildren.length === 0 && children.length === 1 && children[0].isFolder) {
@@ -114,7 +142,6 @@ export class OpenEditorsTreeProvider implements vscode.TreeDataProvider<OpenEdit
 				);
 			}
 
-			// 通常のフォルダ処理
 			return new OpenEditorItem(
 				path.basename(folderPath),
 				vscode.TreeItemCollapsibleState.Expanded,
@@ -141,6 +168,6 @@ export class OpenEditorsTreeProvider implements vscode.TreeDataProvider<OpenEdit
 			}
 		});
 
-		return Promise.resolve(rootItems);
+		return rootItems;
 	}
 } 
