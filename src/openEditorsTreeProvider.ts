@@ -20,30 +20,28 @@ export class OpenEditorsTreeProvider implements vscode.TreeDataProvider<OpenEdit
 			return this.getRootItems();
 		}
 
-		// フォルダアイテムの場合、子アイテムを返す
-		if (element.isFolder) {
-			return Promise.resolve(element.children || []);
-		}
-
-		return Promise.resolve([]);
+		return Promise.resolve(element.children || []);
 	}
 
-	private getRootItems(): OpenEditorItem[] {
+	private getRootItems(): Promise<OpenEditorItem[]> {
 		const workspaceFolders = vscode.workspace.workspaceFolders;
 
 		if (!workspaceFolders || workspaceFolders.length === 0) {
 			console.log('No workspace folders found');
-			return [];
+			return Promise.resolve([]);
 		}
 
-		return workspaceFolders.map(folder =>
-			new OpenEditorItem(
-				folder.uri,
-				vscode.TreeItemCollapsibleState.Expanded,
-				true,
-				this.getWorkspaceFolderItems(folder.uri.fsPath)
-			)
-		);
+		return Promise.all(workspaceFolders.map(async folder => {
+			const children = await this.getWorkspaceFolderItems(folder.uri.fsPath);
+			if (children.length > 0) {
+				return new OpenEditorItem(
+					folder.uri,
+					vscode.TreeItemCollapsibleState.Expanded,
+					children
+				);
+			}
+			return null;
+		})).then(items => items.filter((item): item is OpenEditorItem => item !== null));
 	}
 
 	private getWorkspaceFolderItems(workspaceRoot: string): OpenEditorItem[] {
@@ -90,7 +88,6 @@ export class OpenEditorsTreeProvider implements vscode.TreeDataProvider<OpenEdit
 		const fileItem = new OpenEditorItem(
 			input.uri,
 			vscode.TreeItemCollapsibleState.None,
-			false,
 			undefined,
 			tab.isDirty,
 			tab.isPinned
@@ -130,9 +127,9 @@ export class OpenEditorsTreeProvider implements vscode.TreeDataProvider<OpenEdit
 	}
 
 	private createFolderItem(folderPath: string, children: OpenEditorItem[]): OpenEditorItem {
-		const hasFiles = children.some(child => !child.isFolder);
+		const hasFiles = children.some(child => child.children === undefined);
 		const hasFilesInSubfolders = children.some(child => 
-			child.isFolder && child.children?.some(grandChild => !grandChild.isFolder)
+			child.children !== undefined && child.children.some(grandChild => grandChild.children === undefined)
 		);
 
 		const workspaceFolder = vscode.workspace.workspaceFolders?.[0];
@@ -140,14 +137,13 @@ export class OpenEditorsTreeProvider implements vscode.TreeDataProvider<OpenEdit
 			throw new Error('No workspace folder found');
 		}
 
-		if (!hasFiles && !hasFilesInSubfolders && children.length === 1 && children[0].isFolder) {
+		if (!hasFiles && !hasFilesInSubfolders && children.length === 1 && children[0].children) {
 			const childFolder = children[0];
 			const combinedPath = path.join(folderPath, childFolder.label?.toString() || '');
 			const uri = vscode.Uri.joinPath(workspaceFolder.uri, combinedPath);
 			return new OpenEditorItem(
 				uri,
 				vscode.TreeItemCollapsibleState.Expanded,
-				true,
 				childFolder.children
 			);
 		}
@@ -156,7 +152,6 @@ export class OpenEditorsTreeProvider implements vscode.TreeDataProvider<OpenEdit
 		return new OpenEditorItem(
 			uri,
 			vscode.TreeItemCollapsibleState.Expanded,
-			true,
 			children
 		);
 	}
