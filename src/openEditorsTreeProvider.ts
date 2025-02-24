@@ -36,25 +36,14 @@ export class OpenEditorsTreeProvider implements vscode.TreeDataProvider<OpenEdit
 			return [];
 		}
 
-		const rootItems: OpenEditorItem[] = [];
-		
-		// Promise.allを使用して非同期処理を並列実行
-		await Promise.all(workspaceFolders.map(async folder => {
-			const folderPath = folder.uri.fsPath;
-			
-			const children = await this.getWorkspaceFolderItems(folderPath);
-			if (children.length > 0) {
-				const folderItem = new OpenEditorItem(
-					folder.uri,
-					vscode.TreeItemCollapsibleState.Expanded,
-					true,
-					children
-				);
-				rootItems.push(folderItem);
-			}
-		}));
-
-		return rootItems;
+		return Promise.all(workspaceFolders.map(async folder =>
+			new OpenEditorItem(
+				folder.uri,
+				vscode.TreeItemCollapsibleState.Expanded,
+				true,
+				await this.getWorkspaceFolderItems(folder.uri.fsPath)
+			)
+		));
 	}
 
 	private async getWorkspaceFolderItems(workspaceRoot: string): Promise<OpenEditorItem[]> {
