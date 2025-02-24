@@ -5,14 +5,12 @@ import { OpenEditorsTreeProvider } from './openEditorsTreeProvider';
 import { OpenEditorItem } from './openEditorItem';
 
 function findTab(uri: vscode.Uri): vscode.Tab | undefined {
-	for (const tabGroup of vscode.window.tabGroups.all) {
-		for (const tab of tabGroup.tabs) {
-			if (tab.input instanceof vscode.TabInputText && tab.input.uri.fsPath === uri.fsPath) {
-				return tab;
-			}
-		}
-	}
-	return undefined;
+	return vscode.window.tabGroups.all
+		.flatMap(group => group.tabs)
+		.find(tab => 
+			tab.input instanceof vscode.TabInputText && 
+			tab.input.uri.fsPath === uri.fsPath
+		);
 }
 
 // This method is called when your extension is activated
