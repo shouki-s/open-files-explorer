@@ -35,7 +35,24 @@ export function activate(context: vscode.ExtensionContext) {
 		}
 	});
 
-	context.subscriptions.push(treeView, closeFileCommand);
+	// ピン留めを外すコマンドを登録
+	const unpinEditorCommand = vscode.commands.registerCommand('structuredOpenEditors.unpinEditor', async (item: OpenEditorItem) => {
+		if (!item?.resourceUri) {
+			return;
+		}
+
+		// 指定されたURIを持つタブを探してピン留めを外す
+		for (const tabGroup of vscode.window.tabGroups.all) {
+			for (const tab of tabGroup.tabs) {
+				if (tab.input instanceof vscode.TabInputText && tab.input.uri.fsPath === item.resourceUri.fsPath) {
+					await vscode.commands.executeCommand('workbench.action.unpinEditor', tab.input.uri);
+					break;
+				}
+			}
+		}
+	});
+
+	context.subscriptions.push(treeView, closeFileCommand, unpinEditorCommand);
 }
 
 // This method is called when your extension is deactivated

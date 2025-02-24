@@ -31,7 +31,7 @@ export class OpenEditorItem extends vscode.TreeItem {
 		this.setFileCommand();
 
 		// その他のプロパティを設定
-		this.contextValue = 'file';
+		this.contextValue = this.isPinned ? 'pinnedFile' : 'file';
 		this.tooltip = labelText;
 	}
 

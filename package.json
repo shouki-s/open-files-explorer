@@ -17,6 +17,11 @@
         "command": "structuredOpenEditors.closeFile",
         "title": "Close",
         "icon": "$(close)"
+      },
+      {
+        "command": "structuredOpenEditors.unpinEditor",
+        "title": "Unpin",
+        "icon": "$(pinned)"
       }
     ],
     "views": {
@@ -34,6 +39,11 @@
         {
           "command": "structuredOpenEditors.closeFile",
           "when": "view == structuredOpenEditors && viewItem == file",
+          "group": "inline"
+        },
+        {
+          "command": "structuredOpenEditors.unpinEditor",
+          "when": "view == structuredOpenEditors && viewItem == pinnedFile",
           "group": "inline"
         }
       ]
