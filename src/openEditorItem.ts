@@ -10,12 +10,28 @@ export class OpenEditorItem extends vscode.TreeItem {
 		public readonly isDirty?: boolean,
 		public readonly isPinned?: boolean
 	) {
+		// まずsuperを呼び出す
 		super(labelText, collapsibleState);
 		
 		if (isFolder) {
 			this.initializeAsFolder();
 		} else {
 			this.initializeAsFile(labelText);
+			
+			// ファイルの場合、ラベルにステータスアイコンを追加
+			const statusIcons = [];
+			if (this.isDirty) {
+				statusIcons.push('●');
+			}
+			if (this.isPinned) {
+				statusIcons.push('📌');
+			}
+			if (statusIcons.length > 0) {
+				this.label = {
+					label: `${labelText} ${statusIcons.join(' ')}`,
+					highlights: []
+				};
+			}
 		}
 	}
 
@@ -24,8 +40,8 @@ export class OpenEditorItem extends vscode.TreeItem {
 	}
 
 	private initializeAsFile(labelText: string): void {
-		// ファイルの状態に応じたアイコンを設定
-		this.setFileIcon();
+		// ファイル種別アイコンを設定
+		this.iconPath = vscode.ThemeIcon.File;
 
 		// ファイルを開くコマンドを設定
 		this.command = {
@@ -42,24 +58,5 @@ export class OpenEditorItem extends vscode.TreeItem {
 		this.contextValue = contextValues.join(' ');
 		console.log('TreeItem contextValue:', this.contextValue);
 		this.tooltip = labelText;
-	}
-
-	private setFileIcon(): void {
-		if (!this.isDirty && !this.isPinned) {
-			return;
-		}
-
-		const iconName = this.getStateIconName();
-		this.iconPath = new vscode.ThemeIcon(iconName);
-	}
-
-	private getStateIconName(): string {
-		if (this.isDirty && this.isPinned) {
-			return 'pinned-dirty';
-		}
-		if (this.isDirty) {
-			return 'circle-filled';
-		}
-		return 'pin';
 	}
 } 
