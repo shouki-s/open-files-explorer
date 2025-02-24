@@ -5,17 +5,12 @@ export class OpenEditorItem extends vscode.TreeItem {
 		labelText: string,
 		public readonly collapsibleState: vscode.TreeItemCollapsibleState,
 		public readonly isFolder: boolean = false,
-		public readonly resourceUri?: vscode.Uri,
+		public readonly resourceUri: vscode.Uri,
 		public children?: OpenEditorItem[],
 		public readonly isDirty?: boolean,
 		public readonly isPinned?: boolean
 	) {
-		// まずsuperを呼び出す
-		if (resourceUri) {
-			super(resourceUri, collapsibleState);
-		} else {
-			super(labelText, collapsibleState);
-		}
+		super(resourceUri, collapsibleState);
 		
 		if (isFolder) {
 			this.initializeAsFolder();

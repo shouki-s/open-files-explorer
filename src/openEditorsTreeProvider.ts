@@ -48,7 +48,7 @@ export class OpenEditorsTreeProvider implements vscode.TreeDataProvider<OpenEdit
 					folderName,
 					vscode.TreeItemCollapsibleState.Expanded,
 					true,
-					undefined,
+					folder.uri,
 					children
 				);
 				rootItems.push(folderItem);
@@ -151,13 +151,7 @@ export class OpenEditorsTreeProvider implements vscode.TreeDataProvider<OpenEdit
 
 		const workspaceFolder = vscode.workspace.workspaceFolders?.[0];
 		if (!workspaceFolder) {
-			return new OpenEditorItem(
-				path.basename(folderPath),
-				vscode.TreeItemCollapsibleState.Expanded,
-				true,
-				undefined,
-				children
-			);
+			throw new Error('No workspace folder found');
 		}
 
 		if (!hasFiles && !hasFilesInSubfolders && children.length === 1 && children[0].isFolder) {
