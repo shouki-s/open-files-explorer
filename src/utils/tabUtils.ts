@@ -1,14 +1,23 @@
 import * as vscode from 'vscode';
 
-export function getTextEditorTabs(): vscode.Tab[] {
+export function getAllTabs(): vscode.Tab[] {
     return vscode.window.tabGroups.all
-        .flatMap(group => group.tabs)
-        .filter(tab => tab.input instanceof vscode.TabInputText);
+        .flatMap(group => group.tabs);
 }
 
 export function findTab(uri: vscode.Uri): vscode.Tab | undefined {
-    return getTextEditorTabs()
-        .find(tab => 
-            (tab.input as vscode.TabInputText).uri.fsPath === uri.fsPath
+    return getAllTabs()
+        .find(tab =>
+            tab.input instanceof vscode.TabInputText &&
+            tab.input.uri.fsPath === uri.fsPath
         );
 } 
+
+export function getWorkspaceOpenEditorTabs(workspaceRoot: string): vscode.Tab[] {
+    return getAllTabs()
+        .filter(tab => 
+            tab.input instanceof vscode.TabInputText &&
+            tab.input.uri.fsPath.startsWith(workspaceRoot)
+        );
+}
+
