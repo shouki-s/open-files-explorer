@@ -124,16 +124,43 @@ export class OpenEditorsTreeProvider implements vscode.TreeDataProvider<OpenEdit
 
 		// フォルダツリーを構築
 		const rootItems: OpenEditorItem[] = [];
+		const processFolder = (folderPath: string, children: OpenEditorItem[]): OpenEditorItem => {
+			// 開いているエディタのパスのみを考慮して、単一のフォルダを持つ場合の処理
+			const nonEmptyChildren = children.filter(child => {
+				// フォルダの場合、その中に実際のファイルが含まれているかチェック
+				if (child.isFolder) {
+					return child.children && child.children.some(grandChild => !grandChild.isFolder);
+				}
+				return true; // ファイルの場合はそのまま含める
+			});
+
+			if (nonEmptyChildren.length === 0 && children.length === 1 && children[0].isFolder) {
+				const childFolder = children[0];
+				const combinedPath = path.join(folderPath, childFolder.label.toString());
+				return new OpenEditorItem(
+					combinedPath,
+					vscode.TreeItemCollapsibleState.Expanded,
+					true,
+					undefined,
+					childFolder.children
+				);
+			}
+
+			// 通常のフォルダ処理
+			return new OpenEditorItem(
+				path.basename(folderPath),
+				vscode.TreeItemCollapsibleState.Expanded,
+				true,
+				undefined,
+				children
+			);
+		};
+
 		Object.entries(fileTree).forEach(([folderPath, children]) => {
 			if (folderPath === 'root') {
 				rootItems.push(...children);
 			} else {
-				const folderItem = new OpenEditorItem(
-					path.basename(folderPath),
-					vscode.TreeItemCollapsibleState.Expanded,
-					true
-				);
-				folderItem.children = children;
+				const folderItem = processFolder(folderPath, children);
 				const parentPath = path.dirname(folderPath);
 				if (parentPath === '.') {
 					rootItems.push(folderItem);
@@ -151,13 +178,12 @@ export class OpenEditorsTreeProvider implements vscode.TreeDataProvider<OpenEdit
 }
 
 export class OpenEditorItem extends vscode.TreeItem {
-	children?: OpenEditorItem[];
-
 	constructor(
 		public readonly label: string,
 		public readonly collapsibleState: vscode.TreeItemCollapsibleState,
 		public readonly isFolder: boolean = false,
-		public readonly resourceUri?: vscode.Uri
+		public readonly resourceUri?: vscode.Uri,
+		public children?: OpenEditorItem[]
 	) {
 		super(label, collapsibleState);
 
