@@ -14,10 +14,6 @@
   "contributes": {
     "commands": [
       {
-        "command": "structured-open-editors.helloWorld",
-        "title": "Hello World"
-      },
-      {
         "command": "structuredOpenEditors.closeFile",
         "title": "Close",
         "icon": "$(close)"
