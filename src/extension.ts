@@ -37,7 +37,7 @@ export function activate(context: vscode.ExtensionContext) {
 // This method is called when your extension is deactivated
 export function deactivate() {}
 
-class OpenEditorsTreeProvider implements vscode.TreeDataProvider<OpenEditorItem> {
+export class OpenEditorsTreeProvider implements vscode.TreeDataProvider<OpenEditorItem> {
 	private _onDidChangeTreeData: vscode.EventEmitter<OpenEditorItem | undefined | null | void> = new vscode.EventEmitter<OpenEditorItem | undefined | null | void>();
 	readonly onDidChangeTreeData: vscode.Event<OpenEditorItem | undefined | null | void> = this._onDidChangeTreeData.event;
 
@@ -145,7 +145,7 @@ class OpenEditorsTreeProvider implements vscode.TreeDataProvider<OpenEditorItem>
 	}
 }
 
-class OpenEditorItem extends vscode.TreeItem {
+export class OpenEditorItem extends vscode.TreeItem {
 	children?: OpenEditorItem[];
 
 	constructor(

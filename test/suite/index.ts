@@ -1,6 +1,6 @@
 import * as path from 'path';
-import * as Mocha from 'mocha';
-import * as glob from 'glob';
+import Mocha from 'mocha';
+import glob from 'glob';
 
 export function run(): Promise<void> {
 	// テストモジュールのパスを作成
@@ -12,17 +12,17 @@ export function run(): Promise<void> {
 	const testsRoot = path.resolve(__dirname, '..');
 
 	return new Promise((c, e) => {
-		glob('**/**.test.js', { cwd: testsRoot }, (err, files) => {
+		glob('**/**.test.js', { cwd: testsRoot }, (err: Error | null, files: string[]) => {
 			if (err) {
 				return e(err);
 			}
 
 			// テストファイルを追加
-			files.forEach(f => mocha.addFile(path.resolve(testsRoot, f)));
+			files.forEach((f: string) => mocha.addFile(path.resolve(testsRoot, f)));
 
 			try {
 				// テストを実行
-				mocha.run(failures => {
+				mocha.run((failures: number) => {
 					if (failures > 0) {
 						e(new Error(`${failures} tests failed.`));
 					} else {

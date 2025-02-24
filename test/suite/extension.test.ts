@@ -1,6 +1,7 @@
 import * as assert from 'assert';
 import * as vscode from 'vscode';
 import * as path from 'path';
+import { OpenEditorsTreeProvider, OpenEditorItem } from '../../src/extension';
 
 suite('Extension Test Suite', () => {
 	vscode.window.showInformationMessage('Starting test suite.');
@@ -37,15 +38,15 @@ suite('Extension Test Suite', () => {
 		assert.ok(rootItems.length > 0);
 
 		// srcフォルダが存在することを確認
-		const srcFolder = rootItems.find(item => item.label === 'src');
+		const srcFolder = rootItems.find((item: OpenEditorItem) => item.label === 'src');
 		assert.ok(srcFolder);
 		assert.strictEqual(srcFolder.isFolder, true);
 
 		// srcフォルダの子アイテムをチェック
-		if (srcFolder.isFolder) {
+		if (srcFolder?.isFolder) {
 			const srcChildren = await provider.getChildren(srcFolder);
 			assert.ok(srcChildren.length > 0);
-			assert.ok(srcChildren.some(child => child.label === 'extension.ts'));
+			assert.ok(srcChildren.some((child: OpenEditorItem) => child.label === 'extension.ts'));
 		}
 	});
 
