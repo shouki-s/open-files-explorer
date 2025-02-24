@@ -1,7 +1,7 @@
 import * as vscode from 'vscode';
 import * as path from 'path';
 import { OpenEditorItem } from './openEditorItem';
-import { getTextEditorTabs } from './extension';
+import { getTextEditorTabs } from './utils/tabUtils';
 
 export class OpenEditorsTreeProvider implements vscode.TreeDataProvider<OpenEditorItem> {
 	private _onDidChangeTreeData: vscode.EventEmitter<OpenEditorItem | undefined | null | void> = new vscode.EventEmitter<OpenEditorItem | undefined | null | void>();

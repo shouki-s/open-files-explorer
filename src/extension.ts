@@ -3,19 +3,7 @@
 import * as vscode from 'vscode';
 import { OpenEditorsTreeProvider } from './openEditorsTreeProvider';
 import { OpenEditorItem } from './openEditorItem';
-
-export function getTextEditorTabs(): vscode.Tab[] {
-	return vscode.window.tabGroups.all
-		.flatMap(group => group.tabs)
-		.filter(tab => tab.input instanceof vscode.TabInputText);
-}
-
-function findTab(uri: vscode.Uri): vscode.Tab | undefined {
-	return getTextEditorTabs()
-		.find(tab => 
-			(tab.input as vscode.TabInputText).uri.fsPath === uri.fsPath
-		);
-}
+import { findTab } from './utils/tabUtils';
 
 // This method is called when your extension is activated
 // Your extension is activated the very first time the command is executed
