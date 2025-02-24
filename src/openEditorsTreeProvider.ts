@@ -14,7 +14,7 @@ export class OpenEditorsTreeProvider implements vscode.TreeDataProvider<OpenEdit
 		return element;
 	}
 
-	getChildren(element?: OpenEditorItem): Thenable<OpenEditorItem[]> {
+	getChildren(element?: OpenEditorItem): Promise<OpenEditorItem[]> {
 		if (!element) {
 			// ルートレベル：フォルダ構造を構築
 			return this.getRootItems();
@@ -28,17 +28,18 @@ export class OpenEditorsTreeProvider implements vscode.TreeDataProvider<OpenEdit
 		return Promise.resolve([]);
 	}
 
-	private getRootItems(): Thenable<OpenEditorItem[]> {
+	private async getRootItems(): Promise<OpenEditorItem[]> {
 		const workspaceFolders = vscode.workspace.workspaceFolders;
 
 		if (!workspaceFolders || workspaceFolders.length === 0) {
 			console.log('No workspace folders found');
-			return Promise.resolve([]);
+			return [];
 		}
 
 		const rootItems: OpenEditorItem[] = [];
 		
-		workspaceFolders.forEach(async folder => {
+		// Promise.allを使用して非同期処理を並列実行
+		await Promise.all(workspaceFolders.map(async folder => {
 			const folderPath = folder.uri.fsPath;
 			
 			const children = await this.getWorkspaceFolderItems(folderPath);
@@ -51,9 +52,9 @@ export class OpenEditorsTreeProvider implements vscode.TreeDataProvider<OpenEdit
 				);
 				rootItems.push(folderItem);
 			}
-		});
+		}));
 
-		return Promise.resolve(rootItems);
+		return rootItems;
 	}
 
 	private async getWorkspaceFolderItems(workspaceRoot: string): Promise<OpenEditorItem[]> {
