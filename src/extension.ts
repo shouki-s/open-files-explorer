@@ -19,8 +19,56 @@ export function activate(context: vscode.ExtensionContext) {
 		vscode.window.showInformationMessage('Hello World from structured-open-editors!');
 	});
 
-	context.subscriptions.push(disposable);
+	// ツリービューの登録
+	const treeDataProvider = new OpenEditorsTreeProvider();
+	const treeView = vscode.window.createTreeView('structuredOpenEditors', {
+		treeDataProvider: treeDataProvider
+	});
+
+	// タブの変更を監視して更新
+	vscode.window.tabGroups.onDidChangeTabs(() => {
+		treeDataProvider.refresh();
+	});
+
+	context.subscriptions.push(disposable, treeView);
 }
 
 // This method is called when your extension is deactivated
 export function deactivate() {}
+
+class OpenEditorsTreeProvider implements vscode.TreeDataProvider<OpenEditorItem> {
+	private _onDidChangeTreeData: vscode.EventEmitter<OpenEditorItem | undefined | null | void> = new vscode.EventEmitter<OpenEditorItem | undefined | null | void>();
+	readonly onDidChangeTreeData: vscode.Event<OpenEditorItem | undefined | null | void> = this._onDidChangeTreeData.event;
+
+	refresh(): void {
+		this._onDidChangeTreeData.fire();
+	}
+
+	getTreeItem(element: OpenEditorItem): vscode.TreeItem {
+		return element;
+	}
+
+	getChildren(element?: OpenEditorItem): Thenable<OpenEditorItem[]> {
+		if (element) {
+			return Promise.resolve([]);
+		}
+
+		const editors = vscode.window.tabGroups.all.flatMap(group => 
+			group.tabs.map(tab => new OpenEditorItem(
+				tab.label,
+				vscode.TreeItemCollapsibleState.None
+			))
+		);
+
+		return Promise.resolve(editors);
+	}
+}
+
+class OpenEditorItem extends vscode.TreeItem {
+	constructor(
+		public readonly label: string,
+		public readonly collapsibleState: vscode.TreeItemCollapsibleState
+	) {
+		super(label, collapsibleState);
+	}
+}

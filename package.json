@@ -17,7 +17,17 @@
         "command": "structured-open-editors.helloWorld",
         "title": "Hello World"
       }
-    ]
+    ],
+    "views": {
+      "explorer": [
+        {
+          "id": "structuredOpenEditors",
+          "name": "Structured Open Editors",
+          "icon": "media/icon.svg",
+          "contextualTitle": "Structured Open Editors"
+        }
+      ]
+    }
   },
   "scripts": {
     "vscode:prepublish": "pnpm run package",
