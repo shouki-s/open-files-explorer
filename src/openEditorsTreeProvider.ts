@@ -40,7 +40,6 @@ export class OpenEditorsTreeProvider implements vscode.TreeDataProvider<OpenEdit
 		
 		workspaceFolders.forEach(async folder => {
 			const folderPath = folder.uri.fsPath;
-			const folderName = folder.name;
 			
 			const children = await this.getWorkspaceFolderItems(folderPath);
 			if (children.length > 0) {
