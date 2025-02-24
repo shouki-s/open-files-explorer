@@ -45,7 +45,6 @@ export class OpenEditorsTreeProvider implements vscode.TreeDataProvider<OpenEdit
 			const children = await this.getWorkspaceFolderItems(folderPath);
 			if (children.length > 0) {
 				const folderItem = new OpenEditorItem(
-					folderName,
 					vscode.TreeItemCollapsibleState.Expanded,
 					true,
 					folder.uri,
@@ -88,7 +87,6 @@ export class OpenEditorsTreeProvider implements vscode.TreeDataProvider<OpenEdit
 		const input = tab.input as vscode.TabInputText;
 		const relativePath = path.relative(workspaceRoot, input.uri.fsPath);
 		const parts = relativePath.split(path.sep);
-		const fileName = parts[parts.length - 1];
 		const parentPath = path.dirname(relativePath);
 
 		// フォルダ構造を構築
@@ -101,7 +99,6 @@ export class OpenEditorsTreeProvider implements vscode.TreeDataProvider<OpenEdit
 
 		// ファイルアイテムを作成
 		const fileItem = new OpenEditorItem(
-			fileName,
 			vscode.TreeItemCollapsibleState.None,
 			false,
 			input.uri,
@@ -159,7 +156,6 @@ export class OpenEditorsTreeProvider implements vscode.TreeDataProvider<OpenEdit
 			const combinedPath = path.join(folderPath, childFolder.label?.toString() || '');
 			const uri = vscode.Uri.joinPath(workspaceFolder.uri, combinedPath);
 			return new OpenEditorItem(
-				combinedPath,
 				vscode.TreeItemCollapsibleState.Expanded,
 				true,
 				uri,
@@ -169,7 +165,6 @@ export class OpenEditorsTreeProvider implements vscode.TreeDataProvider<OpenEdit
 
 		const uri = vscode.Uri.joinPath(workspaceFolder.uri, folderPath);
 		return new OpenEditorItem(
-			path.basename(folderPath),
 			vscode.TreeItemCollapsibleState.Expanded,
 			true,
 			uri,

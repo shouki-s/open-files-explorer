@@ -2,7 +2,6 @@ import * as vscode from 'vscode';
 
 export class OpenEditorItem extends vscode.TreeItem {
 	constructor(
-		labelText: string,
 		public readonly collapsibleState: vscode.TreeItemCollapsibleState,
 		public readonly isFolder: boolean = false,
 		public readonly resourceUri: vscode.Uri,
@@ -12,10 +11,12 @@ export class OpenEditorItem extends vscode.TreeItem {
 	) {
 		super(resourceUri, collapsibleState);
 		
+		const fileName = resourceUri.path.split('/').pop() || '';
+		
 		if (isFolder) {
 			this.initializeAsFolder();
 		} else {
-			this.initializeAsFile(labelText);
+			this.initializeAsFile(fileName);
 			
 			// ファイルの場合、ラベルにステータスアイコンを追加
 			const statusIcons = [];
@@ -27,7 +28,7 @@ export class OpenEditorItem extends vscode.TreeItem {
 			}
 			if (statusIcons.length > 0) {
 				this.label = {
-					label: `${labelText} ${statusIcons.join(' ')}`,
+					label: `${fileName} ${statusIcons.join(' ')}`,
 					highlights: []
 				};
 			}
@@ -38,7 +39,7 @@ export class OpenEditorItem extends vscode.TreeItem {
 		this.contextValue = 'folder';
 	}
 
-	private initializeAsFile(labelText: string): void {
+	private initializeAsFile(fileName: string): void {
 		// ファイルを開くコマンドを設定
 		this.command = {
 			command: 'vscode.open',
@@ -52,6 +53,6 @@ export class OpenEditorItem extends vscode.TreeItem {
 			contextValues.push('pinnedFile');
 		}
 		this.contextValue = contextValues.join(' ');
-		this.tooltip = labelText;
+		this.tooltip = fileName;
 	}
 } 
