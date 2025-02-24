@@ -14,13 +14,13 @@ export class OpenEditorsTreeProvider implements vscode.TreeDataProvider<OpenEdit
 		return element;
 	}
 
-	getChildren(element?: OpenEditorItem): Promise<OpenEditorItem[]> {
+	getChildren(element?: OpenEditorItem): OpenEditorItem[] {
 		if (!element) {
 			// ルートレベル：フォルダ構造を構築
 			return this.getRootItems();
 		}
 
-		return Promise.resolve(element.children || []);
+		return element.children || [];
 	}
 
 	private getRootItems(): OpenEditorItem[] {
@@ -115,14 +115,15 @@ export class OpenEditorsTreeProvider implements vscode.TreeDataProvider<OpenEdit
 			const folderItem = this.createFolderItem(folderPath, children);
 			const parentPath = path.dirname(folderPath);
 
+			// ルートレベルのフォルダはrootItemsに直接追加
 			if (parentPath === '.') {
 				rootItems.push(folderItem);
-			} else {
-				if (!fileTree[parentPath]) {
-					fileTree[parentPath] = [];
-				}
-				fileTree[parentPath].push(folderItem);
+				return;
 			}
+
+			// 親フォルダの配列を初期化して追加
+			fileTree[parentPath] = fileTree[parentPath] || [];
+			fileTree[parentPath].push(folderItem);
 		});
 
 		return rootItems;
