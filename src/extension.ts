@@ -66,11 +66,16 @@ export class OpenEditorsTreeProvider implements vscode.TreeDataProvider<OpenEdit
 	private getRootItems(): Thenable<OpenEditorItem[]> {
 		const workspaceRoot = vscode.workspace.workspaceFolders?.[0]?.uri.fsPath;
 		if (!workspaceRoot) {
+			console.log('No workspace root found');
 			return Promise.resolve([]);
 		}
 
 		const fileTree: { [key: string]: OpenEditorItem[] } = {};
 		
+		// デバッグ用のログ
+		console.log('Workspace root:', workspaceRoot);
+		console.log('Tab groups:', vscode.window.tabGroups.all);
+
 		// 開いているタブをフォルダ構造に整理
 		vscode.window.tabGroups.all.forEach(group => {
 			group.tabs.forEach(tab => {
