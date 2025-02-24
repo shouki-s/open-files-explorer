@@ -31,7 +31,7 @@
       {
         "command": "explorer.helloWorld",
         "title": "Hello World",
-        "icon": "$(bell)"
+        "icon": "$(list-filter)"
       }
     ],
     "views": {
