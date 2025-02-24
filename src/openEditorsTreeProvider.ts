@@ -1,6 +1,7 @@
 import * as vscode from 'vscode';
 import * as path from 'path';
 import { OpenEditorItem } from './openEditorItem';
+import { getTextEditorTabs } from './extension';
 
 export class OpenEditorsTreeProvider implements vscode.TreeDataProvider<OpenEditorItem> {
 	private _onDidChangeTreeData: vscode.EventEmitter<OpenEditorItem | undefined | null | void> = new vscode.EventEmitter<OpenEditorItem | undefined | null | void>();
@@ -63,9 +64,10 @@ export class OpenEditorsTreeProvider implements vscode.TreeDataProvider<OpenEdit
 	}
 
 	private getWorkspaceOpenEditors(workspaceRoot: string): vscode.Tab[] {
-		return vscode.window.tabGroups.all
-			.flatMap(group => group.tabs)
-			.filter(tab => tab.input instanceof vscode.TabInputText && tab.input.uri.fsPath.startsWith(workspaceRoot));
+		return getTextEditorTabs()
+			.filter(tab => 
+				(tab.input as vscode.TabInputText).uri.fsPath.startsWith(workspaceRoot)
+			);
 	}
 
 	private addFileToTree(
