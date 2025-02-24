@@ -11,7 +11,11 @@ export class OpenEditorItem extends vscode.TreeItem {
 		public readonly isPinned?: boolean
 	) {
 		// まずsuperを呼び出す
-		super(labelText, collapsibleState);
+		if (resourceUri) {
+			super(resourceUri, collapsibleState);
+		} else {
+			super(labelText, collapsibleState);
+		}
 		
 		if (isFolder) {
 			this.initializeAsFolder();
@@ -36,12 +40,10 @@ export class OpenEditorItem extends vscode.TreeItem {
 	}
 
 	private initializeAsFolder(): void {
-		this.iconPath = new vscode.ThemeIcon('folder');
+		this.contextValue = 'folder';
 	}
 
 	private initializeAsFile(labelText: string): void {
-		// ファイル種別アイコンを設定
-		this.iconPath = vscode.ThemeIcon.File;
 
 		// ファイルを開くコマンドを設定
 		this.command = {
