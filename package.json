@@ -16,6 +16,11 @@
       {
         "command": "structured-open-editors.helloWorld",
         "title": "Hello World"
+      },
+      {
+        "command": "structuredOpenEditors.closeFile",
+        "title": "Close",
+        "icon": "$(close)"
       }
     ],
     "views": {
@@ -25,6 +30,15 @@
           "name": "Structured Open Editors",
           "icon": "media/icon.svg",
           "contextualTitle": "Structured Open Editors"
+        }
+      ]
+    },
+    "menus": {
+      "view/item/context": [
+        {
+          "command": "structuredOpenEditors.closeFile",
+          "when": "view == structuredOpenEditors && viewItem == file",
+          "group": "inline"
         }
       ]
     }

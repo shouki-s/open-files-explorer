@@ -19,6 +19,8 @@ export class OpenEditorItem extends vscode.TreeItem {
 				title: 'Open File',
 				arguments: [resourceUri]
 			};
+			this.contextValue = 'file';
+			this.tooltip = this.label;
 		}
 	}
 } 
