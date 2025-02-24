@@ -28,7 +28,11 @@ export class OpenEditorItem extends vscode.TreeItem {
 		this.setFileIcon();
 
 		// ファイルを開くコマンドを設定
-		this.setFileCommand();
+		this.command = {
+			command: 'vscode.open',
+			title: 'Open File',
+			arguments: [this.resourceUri]
+		};
 
 		// その他のプロパティを設定
 		const contextValues = ['file'];
@@ -36,6 +40,7 @@ export class OpenEditorItem extends vscode.TreeItem {
 			contextValues.push('pinnedFile');
 		}
 		this.contextValue = contextValues.join(' ');
+		console.log('TreeItem contextValue:', this.contextValue);
 		this.tooltip = labelText;
 	}
 
@@ -56,13 +61,5 @@ export class OpenEditorItem extends vscode.TreeItem {
 			return 'circle-filled';
 		}
 		return 'pin';
-	}
-
-	private setFileCommand(): void {
-		this.command = {
-			command: 'vscode.open',
-			title: 'Open File',
-			arguments: [this.resourceUri]
-		};
 	}
 } 

@@ -27,11 +27,6 @@
         "command": "structuredOpenEditors.refreshView",
         "title": "Refresh",
         "icon": "$(refresh)"
-      },
-      {
-        "command": "explorer.helloWorld",
-        "title": "Hello World",
-        "icon": "$(list-filter)"
       }
     ],
     "views": {
@@ -57,16 +52,16 @@
           "group": "navigation"
         }
       ],
-      "view/item/title": [
+      "view/item/context": [
         {
           "command": "structuredOpenEditors.closeFile",
-          "when": "view == structuredOpenEditors && viewItem =~ /file/",
-          "group": "inline"
+          "when": "view == structuredOpenEditors && viewItem == file",
+          "group": "inline@1"
         },
         {
           "command": "structuredOpenEditors.unpinEditor",
           "when": "view == structuredOpenEditors && viewItem =~ /pinnedFile/",
-          "group": "inline"
+          "group": "navigation"
         }
       ]
     }
