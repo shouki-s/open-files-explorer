@@ -23,29 +23,27 @@ export class OpenEditorsTreeProvider implements vscode.TreeDataProvider<OpenEdit
 		return Promise.resolve(element.children || []);
 	}
 
-	private getRootItems(): Promise<OpenEditorItem[]> {
+	private getRootItems(): OpenEditorItem[] {
 		const workspaceFolders = vscode.workspace.workspaceFolders;
 
 		if (!workspaceFolders || workspaceFolders.length === 0) {
 			console.log('No workspace folders found');
-			return Promise.resolve([]);
+			return [];
 		}
 
-		const items = workspaceFolders
+		return workspaceFolders
 			.map(folder => {
 				const children = this.getWorkspaceFolderItems(folder.uri.fsPath);
-				if (children.length > 0) {
-					return new OpenEditorItem(
-						folder.uri,
-						vscode.TreeItemCollapsibleState.Expanded,
-						children
-					);
+				if (children.length === 0) {
+					return null;
 				}
-				return null;
+				return new OpenEditorItem(
+					folder.uri,
+					vscode.TreeItemCollapsibleState.Expanded,
+					children
+				);
 			})
 			.filter((item): item is OpenEditorItem => item !== null);
-
-		return Promise.resolve(items);
 	}
 
 	private getWorkspaceFolderItems(workspaceRoot: string): OpenEditorItem[] {
