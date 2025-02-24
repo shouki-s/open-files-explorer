@@ -22,6 +22,16 @@
         "command": "structuredOpenEditors.unpinEditor",
         "title": "Unpin",
         "icon": "$(pinned)"
+      },
+      {
+        "command": "structuredOpenEditors.refreshView",
+        "title": "Refresh",
+        "icon": "$(refresh)"
+      },
+      {
+        "command": "explorer.helloWorld",
+        "title": "Hello World",
+        "icon": "$(bell)"
       }
     ],
     "views": {
@@ -35,15 +45,27 @@
       ]
     },
     "menus": {
-      "view/item/context": [
+      "view/title": [
+        {
+          "command": "structuredOpenEditors.refreshView",
+          "when": "view == structuredOpenEditors",
+          "group": "navigation"
+        },
+        {
+          "command": "explorer.helloWorld",
+          "when": "view == 'workbench.explorer.fileView'",
+          "group": "navigation"
+        }
+      ],
+      "view/item/title": [
         {
           "command": "structuredOpenEditors.closeFile",
-          "when": "view == structuredOpenEditors && viewItem == file",
+          "when": "view == structuredOpenEditors && viewItem =~ /file/",
           "group": "inline"
         },
         {
           "command": "structuredOpenEditors.unpinEditor",
-          "when": "view == structuredOpenEditors && viewItem == pinnedFile",
+          "when": "view == structuredOpenEditors && viewItem =~ /pinnedFile/",
           "group": "inline"
         }
       ]

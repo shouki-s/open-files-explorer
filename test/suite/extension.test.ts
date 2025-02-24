@@ -1,7 +1,8 @@
 import * as assert from 'assert';
 import * as vscode from 'vscode';
 import * as path from 'path';
-import { OpenEditorsTreeProvider, OpenEditorItem } from '../../src/extension';
+import { OpenEditorsTreeProvider } from '../../src/openEditorsTreeProvider';
+import { OpenEditorItem } from '../../src/openEditorItem';
 
 suite('Extension Test Suite', () => {
 	vscode.window.showInformationMessage('Starting test suite.');
@@ -15,7 +16,7 @@ suite('Extension Test Suite', () => {
 		view.dispose();
 	});
 
-	xtest('Files are organized by folders', async function() {
+	test('Files are organized by folders', async function(this: Mocha.Context) {
 		this.timeout(10000);
 
 		// ワークスペースの確認
@@ -71,7 +72,7 @@ suite('Extension Test Suite', () => {
 		const rootItems = await provider.getChildren();
 
 		// ファイルアイテムのプロパティをチェック
-		const fileItem = rootItems.find(item => !item.isFolder);
+		const fileItem = rootItems.find((item: OpenEditorItem) => !item.isFolder);
 		if (fileItem) {
 			assert.strictEqual(fileItem.collapsibleState, vscode.TreeItemCollapsibleState.None);
 			assert.ok(fileItem.command);
@@ -84,7 +85,7 @@ suite('Extension Test Suite', () => {
 		const rootItems = await provider.getChildren();
 
 		// フォルダアイテムのプロパティをチェック
-		const folderItem = rootItems.find(item => item.isFolder);
+		const folderItem = rootItems.find((item: OpenEditorItem) => item.isFolder);
 		if (folderItem) {
 			assert.strictEqual(folderItem.collapsibleState, vscode.TreeItemCollapsibleState.Expanded);
 			assert.ok(!folderItem.command);

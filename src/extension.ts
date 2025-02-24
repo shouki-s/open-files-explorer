@@ -7,6 +7,11 @@ import { OpenEditorItem } from './openEditorItem';
 // This method is called when your extension is activated
 // Your extension is activated the very first time the command is executed
 export function activate(context: vscode.ExtensionContext) {
+	// Hello Worldコマンドを登録
+	const helloWorldCommand = vscode.commands.registerCommand('explorer.helloWorld', () => {
+		vscode.window.showInformationMessage('Hello World from Explorer!');
+	});
+
 	// ツリービューの登録
 	const treeDataProvider = new OpenEditorsTreeProvider();
 	const treeView = vscode.window.createTreeView('structuredOpenEditors', {
@@ -52,7 +57,17 @@ export function activate(context: vscode.ExtensionContext) {
 		}
 	});
 
-	context.subscriptions.push(treeView, closeFileCommand, unpinEditorCommand);
+	// リフレッシュコマンドを登録
+	const refreshCommand = vscode.commands.registerCommand('structuredOpenEditors.refreshView', () => {
+		treeDataProvider.refresh();
+	});
+
+	// エクスプローラーの更新コマンドを登録
+	const refreshExplorerCommand = vscode.commands.registerCommand('explorer.refreshExplorer', async () => {
+		await vscode.commands.executeCommand('workbench.files.action.refreshFilesExplorer');
+	});
+
+	context.subscriptions.push(treeView, closeFileCommand, unpinEditorCommand, refreshCommand, refreshExplorerCommand, helloWorldCommand);
 }
 
 // This method is called when your extension is deactivated

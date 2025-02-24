@@ -104,7 +104,7 @@ export class OpenEditorsTreeProvider implements vscode.TreeDataProvider<OpenEdit
 
 			if (nonEmptyChildren.length === 0 && children.length === 1 && children[0].isFolder) {
 				const childFolder = children[0];
-				const combinedPath = path.join(folderPath, childFolder.label.toString());
+				const combinedPath = path.join(folderPath, childFolder.label?.toString() || '');
 				return new OpenEditorItem(
 					combinedPath,
 					vscode.TreeItemCollapsibleState.Expanded,
