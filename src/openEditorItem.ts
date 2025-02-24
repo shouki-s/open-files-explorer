@@ -44,7 +44,6 @@ export class OpenEditorItem extends vscode.TreeItem {
 	}
 
 	private initializeAsFile(labelText: string): void {
-
 		// ファイルを開くコマンドを設定
 		this.command = {
 			command: 'vscode.open',
@@ -58,7 +57,6 @@ export class OpenEditorItem extends vscode.TreeItem {
 			contextValues.push('pinnedFile');
 		}
 		this.contextValue = contextValues.join(' ');
-		console.log('TreeItem contextValue:', this.contextValue);
 		this.tooltip = labelText;
 	}
 } 
