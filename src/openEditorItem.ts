@@ -2,25 +2,33 @@ import * as vscode from 'vscode';
 
 export class OpenEditorItem extends vscode.TreeItem {
 	constructor(
-		public readonly label: string,
+		labelText: string,
 		public readonly collapsibleState: vscode.TreeItemCollapsibleState,
 		public readonly isFolder: boolean = false,
 		public readonly resourceUri?: vscode.Uri,
-		public children?: OpenEditorItem[]
+		public children?: OpenEditorItem[],
+		public readonly isDirty?: boolean,
+		public readonly isPinned?: boolean
 	) {
-		super(label, collapsibleState);
+		super(labelText, collapsibleState);
 
 		if (isFolder) {
 			this.iconPath = new vscode.ThemeIcon('folder');
 		} else {
-			this.iconPath = new vscode.ThemeIcon('file');
+			if (isDirty || isPinned) {
+				const icon = isDirty && isPinned ? 'pinned-dirty' :
+					isDirty ? 'circle-filled' :
+					'pin';
+				this.iconPath = new vscode.ThemeIcon(icon);
+			}
+
 			this.command = {
 				command: 'vscode.open',
 				title: 'Open File',
 				arguments: [resourceUri]
 			};
 			this.contextValue = 'file';
-			this.tooltip = this.label;
+			this.tooltip = labelText;
 		}
 	}
 } 

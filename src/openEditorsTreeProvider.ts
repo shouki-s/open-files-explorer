@@ -67,7 +67,10 @@ export class OpenEditorsTreeProvider implements vscode.TreeDataProvider<OpenEdit
 						parts[parts.length - 1],
 						vscode.TreeItemCollapsibleState.None,
 						false,
-						tab.input.uri
+						tab.input.uri,
+						undefined,
+						tab.isDirty,
+						tab.isPinned
 					);
 
 					// 最後のフォルダに追加
