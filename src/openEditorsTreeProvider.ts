@@ -59,115 +59,118 @@ export class OpenEditorsTreeProvider implements vscode.TreeDataProvider<OpenEdit
 	}
 
 	private async getWorkspaceFolderItems(workspaceRoot: string): Promise<OpenEditorItem[]> {
-		const fileTree: { [key: string]: OpenEditorItem[] } = {};
-		
-		// デバッグ用のログ
-		console.log('Processing workspace folder:', workspaceRoot);
-		console.log('Tab groups:', vscode.window.tabGroups.all);
+		const fileTree = this.buildFileTree(workspaceRoot);
+		return this.createTreeStructure(fileTree);
+	}
 
-		// 開いているタブをフォルダ構造に整理
+	private buildFileTree(workspaceRoot: string): { [key: string]: OpenEditorItem[] } {
+		const fileTree: { [key: string]: OpenEditorItem[] } = {};
+
 		vscode.window.tabGroups.all.forEach(group => {
 			group.tabs.forEach(tab => {
-				if (tab.input instanceof vscode.TabInputText) {
-					const filePath = tab.input.uri.fsPath;
-					
-					// このワークスペースフォルダに属するファイルのみを処理
-					if (!filePath.startsWith(workspaceRoot)) {
-						return;
-					}
-
-					const relativePath = path.relative(workspaceRoot, filePath);
-					const parts = relativePath.split(path.sep);
-					
-					let currentPath = '';
-					let currentItems = fileTree;
-					
-					// フォルダ構造を構築
-					for (let i = 0; i < parts.length - 1; i++) {
-						const part = parts[i];
-						currentPath = currentPath ? path.join(currentPath, part) : part;
-						
-						if (!currentItems[currentPath]) {
-							currentItems[currentPath] = [];
-						}
-					}
-
-					// ファイルアイテムを作成
-					const fileItem = new OpenEditorItem(
-						parts[parts.length - 1],
-						vscode.TreeItemCollapsibleState.None,
-						false,
-						tab.input.uri,
-						undefined,
-						tab.isDirty,
-						tab.isPinned
-					);
-
-					// 最後のフォルダに追加
-					const parentPath = path.dirname(relativePath);
-					if (parentPath === '.') {
-						if (!fileTree['root']) {
-							fileTree['root'] = [];
-						}
-						fileTree['root'].push(fileItem);
-					} else {
-						if (!fileTree[parentPath]) {
-							fileTree[parentPath] = [];
-						}
-						fileTree[parentPath].push(fileItem);
-					}
+				if (!(tab.input instanceof vscode.TabInputText)) {
+					return;
 				}
+
+				const filePath = tab.input.uri.fsPath;
+				if (!filePath.startsWith(workspaceRoot)) {
+					return;
+				}
+
+				this.addFileToTree(fileTree, workspaceRoot, tab);
 			});
 		});
 
-		// フォルダツリーを構築
-		const rootItems: OpenEditorItem[] = [];
-		const processFolder = (folderPath: string, children: OpenEditorItem[]): OpenEditorItem => {
-			const nonEmptyChildren = children.filter(child => {
-				if (child.isFolder) {
-					return child.children && child.children.some(grandChild => !grandChild.isFolder);
-				}
-				return true;
-			});
+		return fileTree;
+	}
 
-			if (nonEmptyChildren.length === 0 && children.length === 1 && children[0].isFolder) {
-				const childFolder = children[0];
-				const combinedPath = path.join(folderPath, childFolder.label?.toString() || '');
-				return new OpenEditorItem(
-					combinedPath,
-					vscode.TreeItemCollapsibleState.Expanded,
-					true,
-					undefined,
-					childFolder.children
-				);
+	private addFileToTree(
+		fileTree: { [key: string]: OpenEditorItem[] },
+		workspaceRoot: string,
+		tab: vscode.Tab
+	): void {
+		const input = tab.input as vscode.TabInputText;
+		const relativePath = path.relative(workspaceRoot, input.uri.fsPath);
+		const parts = relativePath.split(path.sep);
+		const fileName = parts[parts.length - 1];
+		const parentPath = path.dirname(relativePath);
+
+		// フォルダ構造を構築
+		for (let i = 0; i < parts.length - 1; i++) {
+			const currentPath = parts.slice(0, i + 1).join(path.sep);
+			if (!fileTree[currentPath]) {
+				fileTree[currentPath] = [];
 			}
+		}
 
-			return new OpenEditorItem(
-				path.basename(folderPath),
-				vscode.TreeItemCollapsibleState.Expanded,
-				true,
-				undefined,
-				children
-			);
-		};
+		// ファイルアイテムを作成
+		const fileItem = new OpenEditorItem(
+			fileName,
+			vscode.TreeItemCollapsibleState.None,
+			false,
+			input.uri,
+			undefined,
+			tab.isDirty,
+			tab.isPinned
+		);
+
+		// ファイルをツリーに追加
+		const targetPath = parentPath === '.' ? 'root' : parentPath;
+		if (!fileTree[targetPath]) {
+			fileTree[targetPath] = [];
+		}
+		fileTree[targetPath].push(fileItem);
+	}
+
+	private createTreeStructure(fileTree: { [key: string]: OpenEditorItem[] }): OpenEditorItem[] {
+		const rootItems: OpenEditorItem[] = [];
 
 		Object.entries(fileTree).forEach(([folderPath, children]) => {
 			if (folderPath === 'root') {
 				rootItems.push(...children);
+				return;
+			}
+
+			const folderItem = this.createFolderItem(folderPath, children);
+			const parentPath = path.dirname(folderPath);
+
+			if (parentPath === '.') {
+				rootItems.push(folderItem);
 			} else {
-				const folderItem = processFolder(folderPath, children);
-				const parentPath = path.dirname(folderPath);
-				if (parentPath === '.') {
-					rootItems.push(folderItem);
-				} else {
-					if (!fileTree[parentPath]) {
-						fileTree[parentPath] = [];
-					}
-					fileTree[parentPath].push(folderItem);
+				if (!fileTree[parentPath]) {
+					fileTree[parentPath] = [];
 				}
+				fileTree[parentPath].push(folderItem);
 			}
 		});
 
 		return rootItems;
+	}
+
+	private createFolderItem(folderPath: string, children: OpenEditorItem[]): OpenEditorItem {
+		const hasFiles = children.some(child => !child.isFolder);
+		const hasFilesInSubfolders = children.some(child => 
+			child.isFolder && child.children?.some(grandChild => !grandChild.isFolder)
+		);
+
+		if (!hasFiles && !hasFilesInSubfolders && children.length === 1 && children[0].isFolder) {
+			const childFolder = children[0];
+			const combinedPath = path.join(folderPath, childFolder.label?.toString() || '');
+			return new OpenEditorItem(
+				combinedPath,
+				vscode.TreeItemCollapsibleState.Expanded,
+				true,
+				undefined,
+				childFolder.children
+			);
+		}
+
+		return new OpenEditorItem(
+			path.basename(folderPath),
+			vscode.TreeItemCollapsibleState.Expanded,
+			true,
+			undefined,
+			children
+		);
 	}
 } 
