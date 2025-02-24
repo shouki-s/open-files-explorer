@@ -61,7 +61,7 @@
         {
           "command": "structuredOpenEditors.unpinEditor",
           "when": "view == structuredOpenEditors && viewItem =~ /pinnedFile/",
-          "group": "navigation"
+          "group": "inline@2"
         }
       ]
     }
