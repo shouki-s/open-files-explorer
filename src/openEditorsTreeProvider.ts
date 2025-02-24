@@ -66,22 +66,18 @@ export class OpenEditorsTreeProvider implements vscode.TreeDataProvider<OpenEdit
 	private buildFileTree(workspaceRoot: string): { [key: string]: OpenEditorItem[] } {
 		const fileTree: { [key: string]: OpenEditorItem[] } = {};
 
-		vscode.window.tabGroups.all.forEach(group => {
-			group.tabs.forEach(tab => {
-				if (!(tab.input instanceof vscode.TabInputText)) {
-					return;
-				}
-
-				const filePath = tab.input.uri.fsPath;
-				if (!filePath.startsWith(workspaceRoot)) {
-					return;
-				}
-
-				this.addFileToTree(fileTree, workspaceRoot, tab);
-			});
+		const openEditors = this.getWorkspaceOpenEditors(workspaceRoot);
+		openEditors.forEach(tab => {
+			this.addFileToTree(fileTree, workspaceRoot, tab);
 		});
 
 		return fileTree;
+	}
+
+	private getWorkspaceOpenEditors(workspaceRoot: string): vscode.Tab[] {
+		return vscode.window.tabGroups.all
+			.flatMap(group => group.tabs)
+			.filter(tab => tab.input instanceof vscode.TabInputText && tab.input.uri.fsPath.startsWith(workspaceRoot));
 	}
 
 	private addFileToTree(
