@@ -45,9 +45,9 @@ export class OpenEditorsTreeProvider implements vscode.TreeDataProvider<OpenEdit
 			const children = await this.getWorkspaceFolderItems(folderPath);
 			if (children.length > 0) {
 				const folderItem = new OpenEditorItem(
+					folder.uri,
 					vscode.TreeItemCollapsibleState.Expanded,
 					true,
-					folder.uri,
 					children
 				);
 				rootItems.push(folderItem);
@@ -99,9 +99,9 @@ export class OpenEditorsTreeProvider implements vscode.TreeDataProvider<OpenEdit
 
 		// ファイルアイテムを作成
 		const fileItem = new OpenEditorItem(
+			input.uri,
 			vscode.TreeItemCollapsibleState.None,
 			false,
-			input.uri,
 			undefined,
 			tab.isDirty,
 			tab.isPinned
@@ -156,18 +156,18 @@ export class OpenEditorsTreeProvider implements vscode.TreeDataProvider<OpenEdit
 			const combinedPath = path.join(folderPath, childFolder.label?.toString() || '');
 			const uri = vscode.Uri.joinPath(workspaceFolder.uri, combinedPath);
 			return new OpenEditorItem(
+				uri,
 				vscode.TreeItemCollapsibleState.Expanded,
 				true,
-				uri,
 				childFolder.children
 			);
 		}
 
 		const uri = vscode.Uri.joinPath(workspaceFolder.uri, folderPath);
 		return new OpenEditorItem(
+			uri,
 			vscode.TreeItemCollapsibleState.Expanded,
 			true,
-			uri,
 			children
 		);
 	}

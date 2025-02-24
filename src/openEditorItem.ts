@@ -2,9 +2,9 @@ import * as vscode from 'vscode';
 
 export class OpenEditorItem extends vscode.TreeItem {
 	constructor(
+		public readonly resourceUri: vscode.Uri,
 		public readonly collapsibleState: vscode.TreeItemCollapsibleState,
 		public readonly isFolder: boolean = false,
-		public readonly resourceUri: vscode.Uri,
 		public children?: OpenEditorItem[],
 		public readonly isDirty?: boolean,
 		public readonly isPinned?: boolean
