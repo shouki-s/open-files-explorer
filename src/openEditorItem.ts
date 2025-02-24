@@ -18,7 +18,7 @@ export class OpenEditorItem extends vscode.TreeItem {
 		} else {
 			this.initializeAsFile(fileName);
 			
-			// ファイルの場合、ラベルにステータスアイコンを追加
+			// ファイルの場合、ステータスアイコンを追加
 			const statusIcons = [];
 			if (this.isDirty) {
 				statusIcons.push('●');
@@ -26,12 +26,7 @@ export class OpenEditorItem extends vscode.TreeItem {
 			if (this.isPinned) {
 				statusIcons.push('📌');
 			}
-			if (statusIcons.length > 0) {
-				this.label = {
-					label: `${fileName} ${statusIcons.join(' ')}`,
-					highlights: []
-				};
-			}
+			this.description = statusIcons.join(' ');
 		}
 	}
 
