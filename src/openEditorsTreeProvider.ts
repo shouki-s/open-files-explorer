@@ -153,23 +153,36 @@ export class OpenEditorsTreeProvider implements vscode.TreeDataProvider<OpenEdit
 			child.isFolder && child.children?.some(grandChild => !grandChild.isFolder)
 		);
 
+		const workspaceFolder = vscode.workspace.workspaceFolders?.[0];
+		if (!workspaceFolder) {
+			return new OpenEditorItem(
+				path.basename(folderPath),
+				vscode.TreeItemCollapsibleState.Expanded,
+				true,
+				undefined,
+				children
+			);
+		}
+
 		if (!hasFiles && !hasFilesInSubfolders && children.length === 1 && children[0].isFolder) {
 			const childFolder = children[0];
 			const combinedPath = path.join(folderPath, childFolder.label?.toString() || '');
+			const uri = vscode.Uri.joinPath(workspaceFolder.uri, combinedPath);
 			return new OpenEditorItem(
 				combinedPath,
 				vscode.TreeItemCollapsibleState.Expanded,
 				true,
-				undefined,
+				uri,
 				childFolder.children
 			);
 		}
 
+		const uri = vscode.Uri.joinPath(workspaceFolder.uri, folderPath);
 		return new OpenEditorItem(
 			path.basename(folderPath),
 			vscode.TreeItemCollapsibleState.Expanded,
 			true,
-			undefined,
+			uri,
 			children
 		);
 	}
