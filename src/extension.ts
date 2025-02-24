@@ -4,6 +4,17 @@ import * as vscode from 'vscode';
 import { OpenEditorsTreeProvider } from './openEditorsTreeProvider';
 import { OpenEditorItem } from './openEditorItem';
 
+function findTab(uri: vscode.Uri): vscode.Tab | undefined {
+	for (const tabGroup of vscode.window.tabGroups.all) {
+		for (const tab of tabGroup.tabs) {
+			if (tab.input instanceof vscode.TabInputText && tab.input.uri.fsPath === uri.fsPath) {
+				return tab;
+			}
+		}
+	}
+	return undefined;
+}
+
 // This method is called when your extension is activated
 // Your extension is activated the very first time the command is executed
 export function activate(context: vscode.ExtensionContext) {
@@ -24,14 +35,9 @@ export function activate(context: vscode.ExtensionContext) {
 			return;
 		}
 
-		// 指定されたURIを持つタブを探して閉じる
-		for (const tabGroup of vscode.window.tabGroups.all) {
-			for (const tab of tabGroup.tabs) {
-				if (tab.input instanceof vscode.TabInputText && tab.input.uri.fsPath === item.resourceUri.fsPath) {
-					await vscode.window.tabGroups.close(tab);
-					break;
-				}
-			}
+		const tab = findTab(item.resourceUri);
+		if (tab) {
+			await vscode.window.tabGroups.close(tab);
 		}
 	});
 
@@ -41,14 +47,9 @@ export function activate(context: vscode.ExtensionContext) {
 			return;
 		}
 
-		// 指定されたURIを持つタブを探してピン留めを外す
-		for (const tabGroup of vscode.window.tabGroups.all) {
-			for (const tab of tabGroup.tabs) {
-				if (tab.input instanceof vscode.TabInputText && tab.input.uri.fsPath === item.resourceUri.fsPath) {
-					await vscode.commands.executeCommand('workbench.action.unpinEditor', tab.input.uri);
-					break;
-				}
-			}
+		const tab = findTab(item.resourceUri);
+		if (tab?.input instanceof vscode.TabInputText) {
+			await vscode.commands.executeCommand('workbench.action.unpinEditor', tab.input.uri);
 		}
 	});
 
