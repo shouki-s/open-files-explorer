@@ -2,6 +2,7 @@
 // Import the module and reference it with the alias vscode in your code below
 import * as vscode from 'vscode';
 import * as path from 'path';
+import { OpenEditorItem } from './openEditorItem';
 
 // This method is called when your extension is activated
 // Your extension is activated the very first time the command is executed
@@ -174,28 +175,5 @@ export class OpenEditorsTreeProvider implements vscode.TreeDataProvider<OpenEdit
 		});
 
 		return Promise.resolve(rootItems);
-	}
-}
-
-export class OpenEditorItem extends vscode.TreeItem {
-	constructor(
-		public readonly label: string,
-		public readonly collapsibleState: vscode.TreeItemCollapsibleState,
-		public readonly isFolder: boolean = false,
-		public readonly resourceUri?: vscode.Uri,
-		public children?: OpenEditorItem[]
-	) {
-		super(label, collapsibleState);
-
-		if (isFolder) {
-			this.iconPath = new vscode.ThemeIcon('folder');
-		} else {
-			this.iconPath = new vscode.ThemeIcon('file');
-			this.command = {
-				command: 'vscode.open',
-				title: 'Open File',
-				arguments: [resourceUri]
-			};
-		}
 	}
 }
