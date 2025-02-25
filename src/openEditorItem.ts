@@ -6,8 +6,7 @@ export class OpenEditorItem extends vscode.TreeItem {
 		public readonly label: string,
 		public readonly collapsibleState: vscode.TreeItemCollapsibleState,
 		public children?: OpenEditorItem[],
-		public readonly isDirty?: boolean,
-		public readonly isPinned?: boolean
+		public readonly tab?: vscode.Tab
 	) {
 		super(resourceUri, collapsibleState);
 		
@@ -25,7 +24,7 @@ export class OpenEditorItem extends vscode.TreeItem {
 
 			// その他のプロパティを設定
 			const contextValues = ['file'];
-			if (this.isPinned) {
+			if (this.tab?.isPinned) {
 				contextValues.push('pinnedFile');
 			}
 			this.contextValue = contextValues.join(' ');
@@ -33,13 +32,26 @@ export class OpenEditorItem extends vscode.TreeItem {
 
 			// ステータスアイコンを追加
 			const statusIcons = [];
-			if (this.isDirty) {
+			if (this.tab?.isDirty) {
 				statusIcons.push('●');
 			}
-			if (this.isPinned) {
+			if (this.tab?.isPinned) {
 				statusIcons.push('📌');
 			}
-			this.description = statusIcons.join(' ');
+
+			// タブグループの情報を取得
+			const tabGroupIndex = this.tab?.group ? vscode.window.tabGroups.all.indexOf(this.tab.group) + 1 : 0;
+			
+			// descriptionを構築
+			const description = [];
+			if (statusIcons.length > 0) {
+				description.push(statusIcons.join(' '));
+			}
+			if (vscode.window.tabGroups.all.length > 1 && tabGroupIndex > 0) {
+				description.push(`(Group ${tabGroupIndex})`);
+			}
+
+			this.description = description.join(' ');
 		}
 	}
 } 

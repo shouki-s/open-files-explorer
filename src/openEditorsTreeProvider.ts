@@ -92,8 +92,7 @@ export class OpenEditorsTreeProvider implements vscode.TreeDataProvider<OpenEdit
 			input.uri.fsPath.split('/').pop() || '',
 			vscode.TreeItemCollapsibleState.None,
 			undefined,
-			tab.isDirty,
-			tab.isPinned
+			tab
 		);
 
 		// ファイルを現在のノードに追加
