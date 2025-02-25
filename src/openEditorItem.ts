@@ -3,6 +3,7 @@ import * as vscode from 'vscode';
 export class OpenEditorItem extends vscode.TreeItem {
 	constructor(
 		public readonly resourceUri: vscode.Uri,
+		public readonly label: string,
 		public readonly collapsibleState: vscode.TreeItemCollapsibleState,
 		public children?: OpenEditorItem[],
 		public readonly isDirty?: boolean,

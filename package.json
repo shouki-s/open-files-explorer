@@ -45,11 +45,6 @@
           "command": "structuredOpenEditors.refreshView",
           "when": "view == structuredOpenEditors",
           "group": "navigation"
-        },
-        {
-          "command": "explorer.helloWorld",
-          "when": "view == 'workbench.explorer.fileView'",
-          "group": "navigation"
         }
       ],
       "view/item/context": [

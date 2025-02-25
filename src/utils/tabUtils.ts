@@ -15,9 +15,16 @@ export function findTab(uri: vscode.Uri): vscode.Tab | undefined {
 
 export function getWorkspaceOpenEditorTabs(workspaceRoot: string): vscode.Tab[] {
     return getAllTabs()
-        .filter(tab => 
+        .filter((tab, index, self) =>
             tab.input instanceof vscode.TabInputText &&
-            tab.input.uri.fsPath.startsWith(workspaceRoot)
-        );
+            tab.input.uri.fsPath.startsWith(workspaceRoot) &&
+            // 重複を削除
+            index === self.findIndex((t) => (t.input as vscode.TabInputText).uri.fsPath === (tab.input as vscode.TabInputText).uri.fsPath)
+        )
+        .sort((a, b) => {
+            const aPath = (a.input as vscode.TabInputText).uri.fsPath;
+            const bPath = (b.input as vscode.TabInputText).uri.fsPath;
+            return aPath.localeCompare(bPath);
+        });
 }
 
