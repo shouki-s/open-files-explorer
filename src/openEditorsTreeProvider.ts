@@ -29,12 +29,11 @@ export class OpenEditorsTreeProvider
 	}
 
 	getChildren(element?: BaseItem): BaseItem[] {
-		if (!element) {
-			// ルートレベル：フォルダ構造を構築
-			return this.getRootItems();
+		if (element) {
+			return element.children;
 		}
-
-		return element.children;
+		// ルートレベル：フォルダ構造を構築
+		return this.getRootItems();
 	}
 
 	private getRootItems(): BaseItem[] {
