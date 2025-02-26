@@ -22,12 +22,6 @@
 			"recommended": false,
 			"style": {
 				"useBlockStatements": "warn",
-				"useNamingConvention": {
-					"level": "warn",
-					"options": {
-						"strictCase": false
-					}
-				},
 				"useThrowOnlyError": "warn"
 			},
 			"suspicious": { "noDoubleEquals": "warn" }
