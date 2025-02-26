@@ -20,11 +20,6 @@
 				"command": "structuredOpenEditors.unpinEditor",
 				"title": "Unpin",
 				"icon": "$(pinned)"
-			},
-			{
-				"command": "structuredOpenEditors.refreshView",
-				"title": "Refresh",
-				"icon": "$(refresh)"
 			}
 		],
 		"views": {
@@ -38,13 +33,6 @@
 			]
 		},
 		"menus": {
-			"view/title": [
-				{
-					"command": "structuredOpenEditors.refreshView",
-					"when": "view == structuredOpenEditors",
-					"group": "navigation"
-				}
-			],
 			"view/item/context": [
 				{
 					"command": "structuredOpenEditors.closeFile",

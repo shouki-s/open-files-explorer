@@ -25,17 +25,7 @@ export function activate(context: vscode.ExtensionContext) {
 		unpinEditor,
 	);
 
-	const refreshCommand = vscode.commands.registerCommand(
-		'structuredOpenEditors.refreshView',
-		treeDataProvider.refresh,
-	);
-
-	context.subscriptions.push(
-		treeView,
-		closeFileCommand,
-		unpinEditorCommand,
-		refreshCommand,
-	);
+	context.subscriptions.push(treeView, closeFileCommand, unpinEditorCommand);
 }
 
 // This method is called when your extension is deactivated
