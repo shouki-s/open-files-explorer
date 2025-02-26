@@ -13,9 +13,7 @@ export function activate(context: vscode.ExtensionContext) {
 		treeDataProvider: treeDataProvider,
 	});
 
-	vscode.window.tabGroups.onDidChangeTabs(() => {
-		treeDataProvider.refresh();
-	});
+	vscode.window.tabGroups.onDidChangeTabs(treeDataProvider.refresh);
 
 	const closeFileCommand = vscode.commands.registerCommand(
 		'structuredOpenEditors.closeFile',
