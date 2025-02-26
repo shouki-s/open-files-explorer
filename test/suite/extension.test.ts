@@ -2,7 +2,9 @@ import * as assert from 'assert';
 import * as vscode from 'vscode';
 import * as path from 'path';
 import { OpenEditorsTreeProvider } from '../../src/openEditorsTreeProvider';
-import { BaseEditorItem, FolderItem, FileItem } from '../../src/openEditorItem';
+import BaseItem from '../../src/items/baseItem';
+import FolderItem from '../../src/items/folderItem';
+import FileItem from '../../src/items/fileItem';
 
 suite('Extension Test Suite', () => {
 	vscode.window.showInformationMessage('Starting test suite.');
@@ -55,7 +57,7 @@ suite('Extension Test Suite', () => {
 		assert.ok(rootItems && rootItems.length > 0, 'Root items should not be empty');
 
 		// srcフォルダが存在することを確認
-		const srcFolder = rootItems.find((item: BaseEditorItem) => item.label === 'src');
+		const srcFolder = rootItems.find((item: BaseItem) => item.label === 'src');
 		assert.ok(srcFolder);
 		assert.ok(srcFolder instanceof FolderItem);
 
@@ -63,7 +65,7 @@ suite('Extension Test Suite', () => {
 		if (srcFolder instanceof FolderItem) {
 			const srcChildren = await provider.getChildren(srcFolder);
 			assert.ok(srcChildren.length > 0);
-			assert.ok(srcChildren.some((child: BaseEditorItem) => 
+			assert.ok(srcChildren.some((child: BaseItem) => 
 				child instanceof FileItem && child.label === 'extension.ts'
 			));
 		}
@@ -74,7 +76,7 @@ suite('Extension Test Suite', () => {
 		const rootItems = await provider.getChildren();
 
 		// ファイルアイテムのプロパティをチェック
-		const fileItem = rootItems.find((item: BaseEditorItem) => item instanceof FileItem);
+		const fileItem = rootItems.find((item: BaseItem) => item instanceof FileItem);
 		if (fileItem) {
 			assert.strictEqual(fileItem.collapsibleState, vscode.TreeItemCollapsibleState.None);
 			assert.ok(fileItem.command);
@@ -87,7 +89,7 @@ suite('Extension Test Suite', () => {
 		const rootItems = await provider.getChildren();
 
 		// フォルダアイテムのプロパティをチェック
-		const folderItem = rootItems.find((item: BaseEditorItem) => item instanceof FolderItem);
+		const folderItem = rootItems.find((item: BaseItem) => item instanceof FolderItem);
 		if (folderItem) {
 			assert.strictEqual(folderItem.collapsibleState, vscode.TreeItemCollapsibleState.Expanded);
 			assert.ok(!folderItem.command);

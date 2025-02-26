@@ -1,6 +1,8 @@
 import * as vscode from 'vscode';
 import * as path from 'path';
-import { BaseEditorItem, FolderItem, FileItem } from './openEditorItem';
+import type BaseItem from './items/baseItem';
+import FolderItem from './items/folderItem';
+import FileItem from './items/fileItem';
 import { getWorkspaceOpenEditorTabs } from './utils/tabUtils';
 
 interface FileTreeNode {
@@ -9,19 +11,19 @@ interface FileTreeNode {
 	items: FileItem[];
 }
 
-export class OpenEditorsTreeProvider implements vscode.TreeDataProvider<BaseEditorItem> {
-	private _onDidChangeTreeData: vscode.EventEmitter<BaseEditorItem | undefined | null | void> = new vscode.EventEmitter<BaseEditorItem | undefined | null | void>();
-	readonly onDidChangeTreeData: vscode.Event<BaseEditorItem | undefined | null | void> = this._onDidChangeTreeData.event;
+export class OpenEditorsTreeProvider implements vscode.TreeDataProvider<BaseItem> {
+	private _onDidChangeTreeData: vscode.EventEmitter<BaseItem | undefined | null | void> = new vscode.EventEmitter<BaseItem | undefined | null | void>();
+	readonly onDidChangeTreeData: vscode.Event<BaseItem | undefined | null | void> = this._onDidChangeTreeData.event;
 
 	refresh(): void {
 		this._onDidChangeTreeData.fire();
 	}
 
-	getTreeItem(element: BaseEditorItem): vscode.TreeItem {
+	getTreeItem(element: BaseItem): vscode.TreeItem {
 		return element;
 	}
 
-	getChildren(element?: BaseEditorItem): BaseEditorItem[] {
+	getChildren(element?: BaseItem): BaseItem[] {
 		if (!element) {
 			// ルートレベル：フォルダ構造を構築
 			return this.getRootItems();
@@ -30,7 +32,7 @@ export class OpenEditorsTreeProvider implements vscode.TreeDataProvider<BaseEdit
 		return element.children;
 	}
 
-	private getRootItems(): BaseEditorItem[] {
+	private getRootItems(): BaseItem[] {
 		const workspaceFolders = vscode.workspace.workspaceFolders;
 		if (!workspaceFolders || workspaceFolders.length === 0) {
 			console.log('No workspace folders found');
@@ -128,7 +130,7 @@ export class OpenEditorsTreeProvider implements vscode.TreeDataProvider<BaseEdit
 		workspaceFolder: vscode.WorkspaceFolder
 	): FolderItem {
 		const folderUri = vscode.Uri.joinPath(workspaceFolder.uri, name);
-		const children: BaseEditorItem[] = [
+		const children: BaseItem[] = [
 			...Array.from(node.children.entries()).map(([childName, childNode]) =>
 				this.createFolderItem(childName, childNode, workspaceFolder)
 			),

@@ -2,7 +2,8 @@
 // Import the module and reference it with the alias vscode in your code below
 import * as vscode from 'vscode';
 import { OpenEditorsTreeProvider } from './openEditorsTreeProvider';
-import { BaseEditorItem, FileItem } from './openEditorItem';
+import BaseItem from './items/baseItem';
+import FileItem from './items/fileItem';
 import { findTab } from './utils/tabUtils';
 
 // This method is called when your extension is activated

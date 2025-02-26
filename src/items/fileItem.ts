@@ -1,29 +1,7 @@
 import * as vscode from 'vscode';
+import BaseItem from './baseItem';
 
-export abstract class BaseEditorItem extends vscode.TreeItem {
-	constructor(
-		public readonly resourceUri: vscode.Uri,
-		public readonly label: string,
-		public readonly collapsibleState: vscode.TreeItemCollapsibleState,
-		public readonly children: BaseEditorItem[] = []
-	) {
-		super(resourceUri, collapsibleState);
-		this.tooltip = label;
-	}
-}
-
-export class FolderItem extends BaseEditorItem {
-	constructor(
-		resourceUri: vscode.Uri,
-		label: string,
-		children: BaseEditorItem[]
-	) {
-		super(resourceUri, label, vscode.TreeItemCollapsibleState.Expanded, children);
-		this.contextValue = 'folder';
-	}
-}
-
-export class FileItem extends BaseEditorItem {
+export default class FileItem extends BaseItem {
 	constructor(
 		resourceUri: vscode.Uri,
 		label: string,
