@@ -21,7 +21,7 @@ export class OpenEditorsTreeProvider
 		this._onDidChangeTreeData.event;
 
 	refresh(): void {
-		this._onDidChangeTreeData.fire();
+		this._onDidChangeTreeData.fire(undefined);
 	}
 
 	getTreeItem(element: BaseItem): vscode.TreeItem {
