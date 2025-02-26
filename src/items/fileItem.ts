@@ -5,7 +5,7 @@ export default class FileItem extends BaseItem {
 	constructor(
 		resourceUri: vscode.Uri,
 		label: string,
-		public readonly tab?: vscode.Tab
+		public readonly tab?: vscode.Tab,
 	) {
 		super(resourceUri, label, vscode.TreeItemCollapsibleState.None);
 
@@ -13,7 +13,7 @@ export default class FileItem extends BaseItem {
 		this.command = {
 			command: 'vscode.open',
 			title: 'Open File',
-			arguments: [this.resourceUri]
+			arguments: [this.resourceUri],
 		};
 
 		// その他のプロパティを設定
@@ -33,8 +33,10 @@ export default class FileItem extends BaseItem {
 		}
 
 		// タブグループの情報を取得
-		const tabGroupIndex = this.tab?.group ? vscode.window.tabGroups.all.indexOf(this.tab.group) + 1 : 0;
-		
+		const tabGroupIndex = this.tab?.group
+			? vscode.window.tabGroups.all.indexOf(this.tab.group) + 1
+			: 0;
+
 		// descriptionを構築
 		const description = [];
 		if (statusIcons.length > 0) {
@@ -46,4 +48,4 @@ export default class FileItem extends BaseItem {
 
 		this.description = description.join(' ');
 	}
-} 
+}

@@ -1,4 +1,4 @@
-const esbuild = require("esbuild");
+const esbuild = require('esbuild');
 
 const production = process.argv.includes('--production');
 const watch = process.argv.includes('--watch');
@@ -15,7 +15,9 @@ const esbuildProblemMatcherPlugin = {
 		});
 		build.onEnd((result) => {
 			for (const { text, location } of result.errors) {
-				console.error(`${location.file}(${location.line},${location.column}): error ${text}`);
+				console.error(
+					`${location.file}(${location.line},${location.column}): error ${text}`,
+				);
 			}
 			console.log('[watch] build finished');
 		});
@@ -24,9 +26,7 @@ const esbuildProblemMatcherPlugin = {
 
 async function main() {
 	const ctx = await esbuild.context({
-		entryPoints: [
-			'src/extension.ts'
-		],
+		entryPoints: ['src/extension.ts'],
 		bundle: true,
 		format: 'cjs',
 		minify: production,
@@ -36,9 +36,7 @@ async function main() {
 		outfile: 'dist/extension.js',
 		external: ['vscode'],
 		logLevel: 'silent',
-		plugins: [
-			esbuildProblemMatcherPlugin,
-		],
+		plugins: [esbuildProblemMatcherPlugin],
 	});
 	if (watch) {
 		await ctx.watch();
@@ -48,7 +46,7 @@ async function main() {
 	}
 }
 
-main().catch(e => {
+main().catch((e) => {
 	console.error(e);
 	process.exit(1);
 });

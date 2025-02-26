@@ -1,8 +1,8 @@
-import * as vscode from 'vscode';
 import * as path from 'path';
+import * as vscode from 'vscode';
 import type BaseItem from './items/baseItem';
-import FolderItem from './items/folderItem';
 import FileItem from './items/fileItem';
+import FolderItem from './items/folderItem';
 import { getWorkspaceOpenEditorTabs } from './utils/tabUtils';
 
 interface FileTreeNode {
@@ -11,9 +11,15 @@ interface FileTreeNode {
 	items: FileItem[];
 }
 
-export class OpenEditorsTreeProvider implements vscode.TreeDataProvider<BaseItem> {
-	private _onDidChangeTreeData: vscode.EventEmitter<BaseItem | undefined | null | void> = new vscode.EventEmitter<BaseItem | undefined | null | void>();
-	readonly onDidChangeTreeData: vscode.Event<BaseItem | undefined | null | void> = this._onDidChangeTreeData.event;
+export class OpenEditorsTreeProvider
+	implements vscode.TreeDataProvider<BaseItem>
+{
+	private _onDidChangeTreeData: vscode.EventEmitter<
+		BaseItem | undefined | null | void
+	> = new vscode.EventEmitter<BaseItem | undefined | null | void>();
+	readonly onDidChangeTreeData: vscode.Event<
+		BaseItem | undefined | null | void
+	> = this._onDidChangeTreeData.event;
 
 	refresh(): void {
 		this._onDidChangeTreeData.fire();
@@ -39,26 +45,33 @@ export class OpenEditorsTreeProvider implements vscode.TreeDataProvider<BaseItem
 			return [];
 		}
 
-		return workspaceFolders
-			.map(folder => this.getWorkspaceFolderItem(folder));
+		return workspaceFolders.map((folder) =>
+			this.getWorkspaceFolderItem(folder),
+		);
 	}
 
-	private getWorkspaceFolderItem(workspaceFolder: vscode.WorkspaceFolder): FolderItem {
+	private getWorkspaceFolderItem(
+		workspaceFolder: vscode.WorkspaceFolder,
+	): FolderItem {
 		const workspaceRoot = workspaceFolder.uri.fsPath;
 		const fileTree = this.buildFileTree(workspaceRoot);
 		const compactedTree = this.compactFolders(fileTree);
-		return this.createFolderItem(compactedTree.name, compactedTree, workspaceFolder);
+		return this.createFolderItem(
+			compactedTree.name,
+			compactedTree,
+			workspaceFolder,
+		);
 	}
 
 	private buildFileTree(workspaceRoot: string): FileTreeNode {
 		const root: FileTreeNode = {
 			name: workspaceRoot.split('/').pop() || '',
 			children: new Map(),
-			items: []
+			items: [],
 		};
 
 		const openEditors = getWorkspaceOpenEditorTabs(workspaceRoot);
-		openEditors.forEach(tab => {
+		openEditors.forEach((tab) => {
 			this.addFileToTree(root, workspaceRoot, tab);
 		});
 
@@ -68,7 +81,7 @@ export class OpenEditorsTreeProvider implements vscode.TreeDataProvider<BaseItem
 	private addFileToTree(
 		root: FileTreeNode,
 		workspaceRoot: string,
-		tab: vscode.Tab
+		tab: vscode.Tab,
 	): void {
 		const input = tab.input as vscode.TabInputText;
 		const relativePath = path.relative(workspaceRoot, input.uri.fsPath);
@@ -82,7 +95,7 @@ export class OpenEditorsTreeProvider implements vscode.TreeDataProvider<BaseItem
 				currentNode.children.set(folderName, {
 					name: folderName,
 					children: new Map(),
-					items: []
+					items: [],
 				});
 			}
 			currentNode = currentNode.children.get(folderName)!;
@@ -92,7 +105,7 @@ export class OpenEditorsTreeProvider implements vscode.TreeDataProvider<BaseItem
 		const fileItem = new FileItem(
 			input.uri,
 			input.uri.fsPath.split('/').pop() || '',
-			tab
+			tab,
 		);
 
 		// ファイルを現在のノードに追加
@@ -106,7 +119,7 @@ export class OpenEditorsTreeProvider implements vscode.TreeDataProvider<BaseItem
 			const newNode: FileTreeNode = {
 				name: `${node.name}/${childName}`,
 				children: childNode.children,
-				items: childNode.items
+				items: childNode.items,
 			};
 			return this.compactFolders(newNode);
 		}
@@ -120,27 +133,23 @@ export class OpenEditorsTreeProvider implements vscode.TreeDataProvider<BaseItem
 		return {
 			name: node.name,
 			children: compactedChildren,
-			items: node.items
+			items: node.items,
 		};
 	}
 
 	private createFolderItem(
 		name: string,
 		node: FileTreeNode,
-		workspaceFolder: vscode.WorkspaceFolder
+		workspaceFolder: vscode.WorkspaceFolder,
 	): FolderItem {
 		const folderUri = vscode.Uri.joinPath(workspaceFolder.uri, name);
 		const children: BaseItem[] = [
 			...Array.from(node.children.entries()).map(([childName, childNode]) =>
-				this.createFolderItem(childName, childNode, workspaceFolder)
+				this.createFolderItem(childName, childNode, workspaceFolder),
 			),
 			...node.items,
 		];
 
-		return new FolderItem(
-			folderUri,
-			name,
-			children
-		);
+		return new FolderItem(folderUri, name, children);
 	}
-} 
+}

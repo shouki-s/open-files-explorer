@@ -1,10 +1,10 @@
 import * as assert from 'assert';
-import * as vscode from 'vscode';
 import * as path from 'path';
-import { OpenEditorsTreeProvider } from '../../src/openEditorsTreeProvider';
+import * as vscode from 'vscode';
 import BaseItem from '../../src/items/baseItem';
-import FolderItem from '../../src/items/folderItem';
 import FileItem from '../../src/items/fileItem';
+import FolderItem from '../../src/items/folderItem';
+import { OpenEditorsTreeProvider } from '../../src/openEditorsTreeProvider';
 
 suite('Extension Test Suite', () => {
 	vscode.window.showInformationMessage('Starting test suite.');
@@ -12,13 +12,13 @@ suite('Extension Test Suite', () => {
 	test('Tree View is registered', async () => {
 		// ビューが登録されているか確認
 		const view = vscode.window.createTreeView('structuredOpenEditors', {
-			treeDataProvider: new MockTreeDataProvider()
+			treeDataProvider: new MockTreeDataProvider(),
 		});
 		assert.ok(view);
 		view.dispose();
 	});
 
-	test('Files are organized by folders', async function(this: Mocha.Context) {
+	test('Files are organized by folders', async function (this: Mocha.Context) {
 		this.timeout(10000);
 
 		// ワークスペースの確認
@@ -33,19 +33,19 @@ suite('Extension Test Suite', () => {
 		const testFiles = [
 			'src/extension.ts',
 			'test/suite/extension.test.ts',
-			'package.json'
-		].map(f => vscode.Uri.file(path.join(workspace.uri.fsPath, f)));
+			'package.json',
+		].map((f) => vscode.Uri.file(path.join(workspace.uri.fsPath, f)));
 
 		// ファイルを開く
 		for (const file of testFiles) {
 			console.log('Opening file:', file.fsPath);
 			const doc = await vscode.workspace.openTextDocument(file);
 			await vscode.window.showTextDocument(doc);
-			await new Promise(resolve => setTimeout(resolve, 500)); // 各ファイルを開いた後に待機
+			await new Promise((resolve) => setTimeout(resolve, 500)); // 各ファイルを開いた後に待機
 		}
 
 		// ツリービューの更新を待機
-		await new Promise(resolve => setTimeout(resolve, 2000));
+		await new Promise((resolve) => setTimeout(resolve, 2000));
 
 		// ツリービューのデータを取得
 		const provider = new OpenEditorsTreeProvider();
@@ -54,7 +54,10 @@ suite('Extension Test Suite', () => {
 		console.log('Root items:', rootItems);
 
 		// ルートレベルのアイテムをチェック
-		assert.ok(rootItems && rootItems.length > 0, 'Root items should not be empty');
+		assert.ok(
+			rootItems && rootItems.length > 0,
+			'Root items should not be empty',
+		);
 
 		// srcフォルダが存在することを確認
 		const srcFolder = rootItems.find((item: BaseItem) => item.label === 'src');
@@ -65,9 +68,12 @@ suite('Extension Test Suite', () => {
 		if (srcFolder instanceof FolderItem) {
 			const srcChildren = await provider.getChildren(srcFolder);
 			assert.ok(srcChildren.length > 0);
-			assert.ok(srcChildren.some((child: BaseItem) => 
-				child instanceof FileItem && child.label === 'extension.ts'
-			));
+			assert.ok(
+				srcChildren.some(
+					(child: BaseItem) =>
+						child instanceof FileItem && child.label === 'extension.ts',
+				),
+			);
 		}
 	});
 
@@ -76,9 +82,14 @@ suite('Extension Test Suite', () => {
 		const rootItems = await provider.getChildren();
 
 		// ファイルアイテムのプロパティをチェック
-		const fileItem = rootItems.find((item: BaseItem) => item instanceof FileItem);
+		const fileItem = rootItems.find(
+			(item: BaseItem) => item instanceof FileItem,
+		);
 		if (fileItem) {
-			assert.strictEqual(fileItem.collapsibleState, vscode.TreeItemCollapsibleState.None);
+			assert.strictEqual(
+				fileItem.collapsibleState,
+				vscode.TreeItemCollapsibleState.None,
+			);
 			assert.ok(fileItem.command);
 			assert.strictEqual(fileItem.command.command, 'vscode.open');
 		}
@@ -89,9 +100,14 @@ suite('Extension Test Suite', () => {
 		const rootItems = await provider.getChildren();
 
 		// フォルダアイテムのプロパティをチェック
-		const folderItem = rootItems.find((item: BaseItem) => item instanceof FolderItem);
+		const folderItem = rootItems.find(
+			(item: BaseItem) => item instanceof FolderItem,
+		);
 		if (folderItem) {
-			assert.strictEqual(folderItem.collapsibleState, vscode.TreeItemCollapsibleState.Expanded);
+			assert.strictEqual(
+				folderItem.collapsibleState,
+				vscode.TreeItemCollapsibleState.Expanded,
+			);
 			assert.ok(!folderItem.command);
 		}
 	});
@@ -100,12 +116,16 @@ suite('Extension Test Suite', () => {
 // モックツリーデータプロバイダー（テスト用）
 class MockTreeDataProvider implements vscode.TreeDataProvider<vscode.TreeItem> {
 	onDidChangeTreeData?: vscode.Event<void | vscode.TreeItem | null | undefined>;
-	
-	getTreeItem(element: vscode.TreeItem): vscode.TreeItem | Thenable<vscode.TreeItem> {
+
+	getTreeItem(
+		element: vscode.TreeItem,
+	): vscode.TreeItem | Thenable<vscode.TreeItem> {
 		return element;
 	}
-	
-	getChildren(element?: vscode.TreeItem): vscode.ProviderResult<vscode.TreeItem[]> {
+
+	getChildren(
+		element?: vscode.TreeItem,
+	): vscode.ProviderResult<vscode.TreeItem[]> {
 		return [];
 	}
-} 
+}

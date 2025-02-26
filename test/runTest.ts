@@ -6,7 +6,10 @@ async function main() {
 		// テストを実行するワークスペースのパス
 		const projectRoot = path.resolve(__dirname, '../');
 		const extensionDevelopmentPath = projectRoot;
-		const extensionTestsPath = path.resolve(projectRoot, 'out/test/suite/index');
+		const extensionTestsPath = path.resolve(
+			projectRoot,
+			'out/test/suite/index',
+		);
 		const workspacePath = projectRoot;
 
 		console.log('Project root:', projectRoot);
@@ -26,8 +29,8 @@ async function main() {
 				'--disable-gl-drawing-for-tests',
 				'--force-cpu-draw',
 				'--user-data-dir=/tmp/vscode-test/user-data',
-				'--force-device-scale-factor=1'
-			]
+				'--force-device-scale-factor=1',
+			],
 		});
 	} catch (err) {
 		console.error('Failed to run tests:', err);
@@ -35,4 +38,4 @@ async function main() {
 	}
 }
 
-main(); 
+main();
