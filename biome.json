@@ -25,13 +25,7 @@
 				"useNamingConvention": {
 					"level": "warn",
 					"options": {
-						"strictCase": false,
-						"conventions": [
-							{
-								"selector": { "kind": "importNamespace" },
-								"formats": ["camelCase", "PascalCase"]
-							}
-						]
+						"strictCase": false
 					}
 				},
 				"useThrowOnlyError": "warn"
