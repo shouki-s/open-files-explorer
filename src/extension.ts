@@ -22,42 +22,19 @@ export function activate(context: vscode.ExtensionContext) {
 	// ファイルを閉じるコマンドを登録
 	const closeFileCommand = vscode.commands.registerCommand(
 		'structuredOpenEditors.closeFile',
-		async (item: FileItem) => {
-			if (!item?.resourceUri) {
-				return;
-			}
-
-			const tab = findTab(item.resourceUri);
-			if (tab) {
-				await vscode.window.tabGroups.close(tab);
-			}
-		},
+		closeFile,
 	);
 
 	// ピン留めを外すコマンドを登録
 	const unpinEditorCommand = vscode.commands.registerCommand(
 		'structuredOpenEditors.unpinEditor',
-		async (item: FileItem) => {
-			if (!item?.resourceUri) {
-				return;
-			}
-
-			const tab = findTab(item.resourceUri);
-			if (tab?.input instanceof vscode.TabInputText) {
-				await vscode.commands.executeCommand(
-					'workbench.action.unpinEditor',
-					tab.input.uri,
-				);
-			}
-		},
+		unpinEditor,
 	);
 
 	// リフレッシュコマンドを登録
 	const refreshCommand = vscode.commands.registerCommand(
 		'structuredOpenEditors.refreshView',
-		() => {
-			treeDataProvider.refresh();
-		},
+		treeDataProvider.refresh,
 	);
 
 	context.subscriptions.push(
@@ -70,3 +47,20 @@ export function activate(context: vscode.ExtensionContext) {
 
 // This method is called when your extension is deactivated
 export function deactivate() {}
+
+export async function closeFile(item: FileItem) {
+	const tab = findTab(item.resourceUri);
+	if (tab) {
+		await vscode.window.tabGroups.close(tab);
+	}
+}
+
+export async function unpinEditor(item: FileItem) {
+	const tab = findTab(item.resourceUri);
+	if (tab?.input instanceof vscode.TabInputText) {
+		await vscode.commands.executeCommand(
+			'workbench.action.unpinEditor',
+			tab.input.uri,
+		);
+	}
+}
