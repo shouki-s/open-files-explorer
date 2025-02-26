@@ -8,30 +8,25 @@ import { findTab } from './utils/tabUtils';
 // This method is called when your extension is activated
 // Your extension is activated the very first time the command is executed
 export function activate(context: vscode.ExtensionContext) {
-	// ツリービューの登録
 	const treeDataProvider = new OpenEditorsTreeProvider();
 	const treeView = vscode.window.createTreeView('structuredOpenEditors', {
 		treeDataProvider: treeDataProvider,
 	});
 
-	// タブの変更を監視して更新
 	vscode.window.tabGroups.onDidChangeTabs(() => {
 		treeDataProvider.refresh();
 	});
 
-	// ファイルを閉じるコマンドを登録
 	const closeFileCommand = vscode.commands.registerCommand(
 		'structuredOpenEditors.closeFile',
 		closeFile,
 	);
 
-	// ピン留めを外すコマンドを登録
 	const unpinEditorCommand = vscode.commands.registerCommand(
 		'structuredOpenEditors.unpinEditor',
 		unpinEditor,
 	);
 
-	// リフレッシュコマンドを登録
 	const refreshCommand = vscode.commands.registerCommand(
 		'structuredOpenEditors.refreshView',
 		treeDataProvider.refresh,
@@ -48,14 +43,14 @@ export function activate(context: vscode.ExtensionContext) {
 // This method is called when your extension is deactivated
 export function deactivate() {}
 
-export async function closeFile(item: FileItem) {
+async function closeFile(item: FileItem) {
 	const tab = findTab(item.resourceUri);
 	if (tab) {
 		await vscode.window.tabGroups.close(tab);
 	}
 }
 
-export async function unpinEditor(item: FileItem) {
+async function unpinEditor(item: FileItem) {
 	const tab = findTab(item.resourceUri);
 	if (tab?.input instanceof vscode.TabInputText) {
 		await vscode.commands.executeCommand(
