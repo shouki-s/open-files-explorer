@@ -9,9 +9,9 @@ export class OpenEditorItem extends vscode.TreeItem {
 		public readonly tab?: vscode.Tab
 	) {
 		super(resourceUri, collapsibleState);
-		
-		const fileName = resourceUri.path.split('/').pop() || '';
-		
+
+		this.tooltip = label;
+
 		if (children !== undefined) {
 			this.contextValue = 'folder';
 		} else {
@@ -28,7 +28,6 @@ export class OpenEditorItem extends vscode.TreeItem {
 				contextValues.push('pinnedFile');
 			}
 			this.contextValue = contextValues.join(' ');
-			this.tooltip = fileName;
 
 			// ステータスアイコンを追加
 			const statusIcons = [];
