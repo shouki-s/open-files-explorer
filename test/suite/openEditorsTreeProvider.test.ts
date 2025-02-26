@@ -1,7 +1,7 @@
 import * as assert from 'node:assert';
 import * as vscode from 'vscode';
 import { OpenEditorsTreeProvider } from '../../src/openEditorsTreeProvider';
-import { cleanupTestWorkspace, createTestEditor } from '../helpers/testUtils';
+import { createTestEditor } from '../helpers/testUtils';
 
 suite('OpenEditorsTreeProvider Test Suite', () => {
 	let provider: OpenEditorsTreeProvider;
@@ -9,12 +9,10 @@ suite('OpenEditorsTreeProvider Test Suite', () => {
 	setup(async function () {
 		this.timeout(10000); // タイムアウトを10秒に設定
 		provider = new OpenEditorsTreeProvider();
-		await cleanupTestWorkspace();
 	});
 
 	teardown(async function () {
 		this.timeout(10000); // タイムアウトを10秒に設定
-		await cleanupTestWorkspace();
 	});
 
 	test('エディタを開くとツリーアイテムが作成される', async () => {
