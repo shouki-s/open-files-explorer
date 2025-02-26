@@ -2,7 +2,7 @@
 // Import the module and reference it with the alias vscode in your code below
 import * as vscode from 'vscode';
 import { OpenEditorsTreeProvider } from './openEditorsTreeProvider';
-import { OpenEditorItem } from './openEditorItem';
+import { BaseEditorItem, FileItem } from './openEditorItem';
 import { findTab } from './utils/tabUtils';
 
 // This method is called when your extension is activated
@@ -20,7 +20,7 @@ export function activate(context: vscode.ExtensionContext) {
 	});
 
 	// ファイルを閉じるコマンドを登録
-	const closeFileCommand = vscode.commands.registerCommand('structuredOpenEditors.closeFile', async (item: OpenEditorItem) => {
+	const closeFileCommand = vscode.commands.registerCommand('structuredOpenEditors.closeFile', async (item: FileItem) => {
 		if (!item?.resourceUri) {
 			return;
 		}
@@ -32,7 +32,7 @@ export function activate(context: vscode.ExtensionContext) {
 	});
 
 	// ピン留めを外すコマンドを登録
-	const unpinEditorCommand = vscode.commands.registerCommand('structuredOpenEditors.unpinEditor', async (item: OpenEditorItem) => {
+	const unpinEditorCommand = vscode.commands.registerCommand('structuredOpenEditors.unpinEditor', async (item: FileItem) => {
 		if (!item?.resourceUri) {
 			return;
 		}

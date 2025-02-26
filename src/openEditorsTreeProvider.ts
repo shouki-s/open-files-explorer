@@ -1,36 +1,36 @@
 import * as vscode from 'vscode';
 import * as path from 'path';
-import { OpenEditorItem } from './openEditorItem';
+import { BaseEditorItem, FolderItem, FileItem } from './openEditorItem';
 import { getWorkspaceOpenEditorTabs } from './utils/tabUtils';
 
 interface FileTreeNode {
 	name: string;
 	children: Map<string, FileTreeNode>;
-	items: OpenEditorItem[];
+	items: FileItem[];
 }
 
-export class OpenEditorsTreeProvider implements vscode.TreeDataProvider<OpenEditorItem> {
-	private _onDidChangeTreeData: vscode.EventEmitter<OpenEditorItem | undefined | null | void> = new vscode.EventEmitter<OpenEditorItem | undefined | null | void>();
-	readonly onDidChangeTreeData: vscode.Event<OpenEditorItem | undefined | null | void> = this._onDidChangeTreeData.event;
+export class OpenEditorsTreeProvider implements vscode.TreeDataProvider<BaseEditorItem> {
+	private _onDidChangeTreeData: vscode.EventEmitter<BaseEditorItem | undefined | null | void> = new vscode.EventEmitter<BaseEditorItem | undefined | null | void>();
+	readonly onDidChangeTreeData: vscode.Event<BaseEditorItem | undefined | null | void> = this._onDidChangeTreeData.event;
 
 	refresh(): void {
 		this._onDidChangeTreeData.fire();
 	}
 
-	getTreeItem(element: OpenEditorItem): vscode.TreeItem {
+	getTreeItem(element: BaseEditorItem): vscode.TreeItem {
 		return element;
 	}
 
-	getChildren(element?: OpenEditorItem): OpenEditorItem[] {
+	getChildren(element?: BaseEditorItem): BaseEditorItem[] {
 		if (!element) {
 			// ルートレベル：フォルダ構造を構築
 			return this.getRootItems();
 		}
 
-		return element.children || [];
+		return element.children;
 	}
 
-	private getRootItems(): OpenEditorItem[] {
+	private getRootItems(): BaseEditorItem[] {
 		const workspaceFolders = vscode.workspace.workspaceFolders;
 		if (!workspaceFolders || workspaceFolders.length === 0) {
 			console.log('No workspace folders found');
@@ -39,13 +39,13 @@ export class OpenEditorsTreeProvider implements vscode.TreeDataProvider<OpenEdit
 
 		return workspaceFolders
 			.map(folder => this.getWorkspaceFolderItem(folder));
-		}
+	}
 
-	private getWorkspaceFolderItem(workspaceFolder: vscode.WorkspaceFolder): OpenEditorItem {
+	private getWorkspaceFolderItem(workspaceFolder: vscode.WorkspaceFolder): FolderItem {
 		const workspaceRoot = workspaceFolder.uri.fsPath;
 		const fileTree = this.buildFileTree(workspaceRoot);
 		const compactedTree = this.compactFolders(fileTree);
-		return this.createOpenEditorItem(compactedTree.name, compactedTree, workspaceFolder);
+		return this.createFolderItem(compactedTree.name, compactedTree, workspaceFolder);
 	}
 
 	private buildFileTree(workspaceRoot: string): FileTreeNode {
@@ -87,11 +87,9 @@ export class OpenEditorsTreeProvider implements vscode.TreeDataProvider<OpenEdit
 		}
 
 		// ファイルアイテムを作成
-		const fileItem = new OpenEditorItem(
+		const fileItem = new FileItem(
 			input.uri,
 			input.uri.fsPath.split('/').pop() || '',
-			vscode.TreeItemCollapsibleState.None,
-			undefined,
 			tab
 		);
 
@@ -124,23 +122,22 @@ export class OpenEditorsTreeProvider implements vscode.TreeDataProvider<OpenEdit
 		};
 	}
 
-	private createOpenEditorItem(
+	private createFolderItem(
 		name: string,
 		node: FileTreeNode,
 		workspaceFolder: vscode.WorkspaceFolder
-	): OpenEditorItem {
+	): FolderItem {
 		const folderUri = vscode.Uri.joinPath(workspaceFolder.uri, name);
-		const children: OpenEditorItem[] = [
+		const children: BaseEditorItem[] = [
 			...Array.from(node.children.entries()).map(([childName, childNode]) =>
-				this.createOpenEditorItem(childName, childNode, workspaceFolder)
+				this.createFolderItem(childName, childNode, workspaceFolder)
 			),
 			...node.items,
 		];
 
-		return new OpenEditorItem(
+		return new FolderItem(
 			folderUri,
 			name,
-			vscode.TreeItemCollapsibleState.Expanded,
 			children
 		);
 	}
