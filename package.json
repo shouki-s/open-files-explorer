@@ -1,103 +1,95 @@
 {
-  "name": "structured-open-editors",
-  "displayName": "structured-open-editors",
-  "description": "",
-  "version": "0.0.1",
-  "engines": {
-    "vscode": "^1.97.0"
-  },
-  "categories": [
-    "Other"
-  ],
-  "activationEvents": [],
-  "main": "./dist/extension.js",
-  "contributes": {
-    "commands": [
-      {
-        "command": "structuredOpenEditors.closeFile",
-        "title": "Close",
-        "icon": "$(close)"
-      },
-      {
-        "command": "structuredOpenEditors.unpinEditor",
-        "title": "Unpin",
-        "icon": "$(pinned)"
-      },
-      {
-        "command": "structuredOpenEditors.refreshView",
-        "title": "Refresh",
-        "icon": "$(refresh)"
-      }
-    ],
-    "views": {
-      "explorer": [
-        {
-          "id": "structuredOpenEditors",
-          "name": "Structured Open Editors",
-          "icon": "media/icon.svg",
-          "contextualTitle": "Structured Open Editors"
-        }
-      ]
-    },
-    "menus": {
-      "view/title": [
-        {
-          "command": "structuredOpenEditors.refreshView",
-          "when": "view == structuredOpenEditors",
-          "group": "navigation"
-        }
-      ],
-      "view/item/context": [
-        {
-          "command": "structuredOpenEditors.closeFile",
-          "when": "view == structuredOpenEditors && viewItem == file",
-          "group": "inline@1"
-        },
-        {
-          "command": "structuredOpenEditors.unpinEditor",
-          "when": "view == structuredOpenEditors && viewItem =~ /pinnedFile/",
-          "group": "inline@2"
-        }
-      ]
-    }
-  },
-  "scripts": {
-    "vscode:prepublish": "pnpm run package",
-    "compile": "pnpm run check-types && pnpm run lint && node esbuild.js",
-    "watch": "npm-run-all -p watch:*",
-    "watch:esbuild": "node esbuild.js --watch",
-    "watch:tsc": "tsc --noEmit --watch --project tsconfig.json",
-    "package": "pnpm run check-types && pnpm run lint && node esbuild.js --production",
-    "compile-tests": "tsc -p . --outDir out",
-    "watch-tests": "tsc -p . -w --outDir out",
-    "pretest": "pnpm run compile-tests && pnpm run compile && pnpm run lint",
-    "check-types": "tsc --noEmit",
-    "lint": "eslint src test",
-    "test": "vscode-test"
-  },
-  "devDependencies": {
-    "@biomejs/biome": "1.9.4",
-    "@types/glob": "^8.1.0",
-    "@types/mocha": "^10.0.10",
-    "@types/node": "20.x",
-    "@types/vscode": "^1.97.0",
-    "@typescript-eslint/eslint-plugin": "^8.22.0",
-    "@typescript-eslint/parser": "^8.22.0",
-    "@vscode/test-cli": "^0.0.10",
-    "@vscode/test-electron": "^2.4.1",
-    "esbuild": "^0.24.2",
-    "eslint": "^9.19.0",
-    "npm-run-all": "^4.1.5",
-    "typescript": "^5.7.3"
-  },
-  "pnpm": {
-    "ignoredBuiltDependencies": [
-      "@biomejs/biome",
-      "esbuild"
-    ],
-    "onlyBuiltDependencies": [
-      "@biomejs/biome",
-      "esbuild"
-    ]
-  }
+	"name": "structured-open-editors",
+	"displayName": "structured-open-editors",
+	"description": "",
+	"version": "0.0.1",
+	"engines": {
+		"vscode": "^1.97.0"
+	},
+	"categories": ["Other"],
+	"activationEvents": [],
+	"main": "./dist/extension.js",
+	"contributes": {
+		"commands": [
+			{
+				"command": "structuredOpenEditors.closeFile",
+				"title": "Close",
+				"icon": "$(close)"
+			},
+			{
+				"command": "structuredOpenEditors.unpinEditor",
+				"title": "Unpin",
+				"icon": "$(pinned)"
+			},
+			{
+				"command": "structuredOpenEditors.refreshView",
+				"title": "Refresh",
+				"icon": "$(refresh)"
+			}
+		],
+		"views": {
+			"explorer": [
+				{
+					"id": "structuredOpenEditors",
+					"name": "Structured Open Editors",
+					"icon": "media/icon.svg",
+					"contextualTitle": "Structured Open Editors"
+				}
+			]
+		},
+		"menus": {
+			"view/title": [
+				{
+					"command": "structuredOpenEditors.refreshView",
+					"when": "view == structuredOpenEditors",
+					"group": "navigation"
+				}
+			],
+			"view/item/context": [
+				{
+					"command": "structuredOpenEditors.closeFile",
+					"when": "view == structuredOpenEditors && viewItem == file",
+					"group": "inline@1"
+				},
+				{
+					"command": "structuredOpenEditors.unpinEditor",
+					"when": "view == structuredOpenEditors && viewItem =~ /pinnedFile/",
+					"group": "inline@2"
+				}
+			]
+		}
+	},
+	"scripts": {
+		"vscode:prepublish": "pnpm run package",
+		"compile": "pnpm run check-types && pnpm run lint && node esbuild.js",
+		"watch": "npm-run-all -p watch:*",
+		"watch:esbuild": "node esbuild.js --watch",
+		"watch:tsc": "tsc --noEmit --watch --project tsconfig.json",
+		"package": "pnpm run check-types && pnpm run lint && node esbuild.js --production",
+		"compile-tests": "tsc -p . --outDir out",
+		"watch-tests": "tsc -p . -w --outDir out",
+		"pretest": "pnpm run compile-tests && pnpm run compile && pnpm run lint",
+		"check-types": "tsc --noEmit",
+		"lint": "biome check",
+		"test": "vscode-test"
+	},
+	"devDependencies": {
+		"@biomejs/biome": "1.9.4",
+		"@types/glob": "^8.1.0",
+		"@types/mocha": "^10.0.10",
+		"@types/node": "20.x",
+		"@types/vscode": "^1.97.0",
+		"@typescript-eslint/eslint-plugin": "^8.22.0",
+		"@typescript-eslint/parser": "^8.22.0",
+		"@vscode/test-cli": "^0.0.10",
+		"@vscode/test-electron": "^2.4.1",
+		"esbuild": "^0.24.2",
+		"eslint": "^9.19.0",
+		"npm-run-all": "^4.1.5",
+		"typescript": "^5.7.3"
+	},
+	"pnpm": {
+		"ignoredBuiltDependencies": ["@biomejs/biome", "esbuild"],
+		"onlyBuiltDependencies": ["@biomejs/biome", "esbuild"]
+	}
 }
