@@ -3,11 +3,12 @@
 	"displayName": "structured-open-editors",
 	"description": "",
 	"version": "0.0.1",
+	"publisher": "shouki-s",
 	"engines": {
 		"vscode": "^1.97.0"
 	},
 	"categories": ["Other"],
-	"activationEvents": [],
+	"activationEvents": ["onView:structuredOpenEditors"],
 	"main": "./dist/extension.js",
 	"contributes": {
 		"commands": [
