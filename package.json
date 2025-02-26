@@ -76,6 +76,7 @@
     "test": "vscode-test"
   },
   "devDependencies": {
+    "@biomejs/biome": "1.9.4",
     "@types/glob": "^8.1.0",
     "@types/mocha": "^10.0.10",
     "@types/node": "20.x",
@@ -91,9 +92,11 @@
   },
   "pnpm": {
     "ignoredBuiltDependencies": [
+      "@biomejs/biome",
       "esbuild"
     ],
     "onlyBuiltDependencies": [
+      "@biomejs/biome",
       "esbuild"
     ]
   }
