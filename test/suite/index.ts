@@ -1,4 +1,4 @@
-import * as path from 'path';
+import * as path from 'node:path';
 import glob from 'glob';
 import Mocha from 'mocha';
 
@@ -21,7 +21,9 @@ export function run(): Promise<void> {
 				}
 
 				// テストファイルを追加
-				files.forEach((f: string) => mocha.addFile(path.resolve(testsRoot, f)));
+				for (const f of files) {
+					mocha.addFile(path.resolve(testsRoot, f));
+				}
 
 				try {
 					// テストを実行

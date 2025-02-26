@@ -1,8 +1,7 @@
 // The module 'vscode' contains the VS Code extensibility API
 // Import the module and reference it with the alias vscode in your code below
 import * as vscode from 'vscode';
-import BaseItem from './items/baseItem';
-import FileItem from './items/fileItem';
+import type FileItem from './items/fileItem';
 import { OpenEditorsTreeProvider } from './openEditorsTreeProvider';
 import { findTab } from './utils/tabUtils';
 

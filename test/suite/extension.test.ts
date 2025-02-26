@@ -1,7 +1,7 @@
-import * as assert from 'assert';
-import * as path from 'path';
+import * as assert from 'node:assert';
+import * as path from 'node:path';
 import * as vscode from 'vscode';
-import BaseItem from '../../src/items/baseItem';
+import type BaseItem from '../../src/items/baseItem';
 import FileItem from '../../src/items/fileItem';
 import FolderItem from '../../src/items/folderItem';
 import { OpenEditorsTreeProvider } from '../../src/openEditorsTreeProvider';
@@ -115,7 +115,7 @@ suite('Extension Test Suite', () => {
 
 // モックツリーデータプロバイダー（テスト用）
 class MockTreeDataProvider implements vscode.TreeDataProvider<vscode.TreeItem> {
-	onDidChangeTreeData?: vscode.Event<void | vscode.TreeItem | null | undefined>;
+	onDidChangeTreeData?: vscode.Event<vscode.TreeItem | null | undefined>;
 
 	getTreeItem(
 		element: vscode.TreeItem,

@@ -1,4 +1,4 @@
-import * as path from 'path';
+import * as path from 'node:path';
 import * as vscode from 'vscode';
 import type BaseItem from './items/baseItem';
 import FileItem from './items/fileItem';
@@ -15,11 +15,10 @@ export class OpenEditorsTreeProvider
 	implements vscode.TreeDataProvider<BaseItem>
 {
 	private _onDidChangeTreeData: vscode.EventEmitter<
-		BaseItem | undefined | null | void
-	> = new vscode.EventEmitter<BaseItem | undefined | null | void>();
-	readonly onDidChangeTreeData: vscode.Event<
-		BaseItem | undefined | null | void
-	> = this._onDidChangeTreeData.event;
+		BaseItem | undefined | null
+	> = new vscode.EventEmitter<BaseItem | undefined | null>();
+	readonly onDidChangeTreeData: vscode.Event<BaseItem | undefined | null> =
+		this._onDidChangeTreeData.event;
 
 	refresh(): void {
 		this._onDidChangeTreeData.fire();
@@ -71,9 +70,9 @@ export class OpenEditorsTreeProvider
 		};
 
 		const openEditors = getWorkspaceOpenEditorTabs(workspaceRoot);
-		openEditors.forEach((tab) => {
+		for (const tab of openEditors) {
 			this.addFileToTree(root, workspaceRoot, tab);
-		});
+		}
 
 		return root;
 	}
@@ -91,14 +90,18 @@ export class OpenEditorsTreeProvider
 		// フォルダ構造を構築
 		for (let i = 0; i < parts.length - 1; i++) {
 			const folderName = parts[i];
-			if (!currentNode.children.has(folderName)) {
-				currentNode.children.set(folderName, {
+			const existingNode = currentNode.children.get(folderName);
+			if (existingNode) {
+				currentNode = existingNode;
+			} else {
+				const nextNode = {
 					name: folderName,
 					children: new Map(),
 					items: [],
-				});
+				};
+				currentNode.children.set(folderName, nextNode);
+				currentNode = nextNode;
 			}
-			currentNode = currentNode.children.get(folderName)!;
 		}
 
 		// ファイルアイテムを作成
