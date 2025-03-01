@@ -57,7 +57,7 @@ export class OpenEditorsTreeProvider
 		return this.createFolderItem(
 			compactedTree.name,
 			compactedTree,
-			workspaceFolder,
+			workspaceFolder.uri,
 		);
 	}
 
@@ -142,12 +142,15 @@ export class OpenEditorsTreeProvider
 	private createFolderItem(
 		name: string,
 		node: FileTreeNode,
-		workspaceFolder: vscode.WorkspaceFolder,
+		folderUri: vscode.Uri,
 	): FolderItem {
-		const folderUri = vscode.Uri.joinPath(workspaceFolder.uri, name);
 		const children: BaseItem[] = [
 			...Array.from(node.children.entries()).map(([childName, childNode]) =>
-				this.createFolderItem(childName, childNode, workspaceFolder),
+				this.createFolderItem(
+					childName,
+					childNode,
+					vscode.Uri.joinPath(folderUri, childName),
+				),
 			),
 			...node.items,
 		];
