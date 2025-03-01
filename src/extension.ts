@@ -66,7 +66,8 @@ async function closeFolder(item: FolderItem) {
 		.filter(
 			(tab) =>
 				tab.input instanceof vscode.TabInputText &&
-				tab.input.uri.fsPath.startsWith(item.resourceUri.fsPath),
+				tab.input.uri.fsPath.startsWith(item.resourceUri.fsPath) &&
+				!tab.isPinned
 		);
 	await vscode.window.tabGroups.close(tabsToClose);
 }
