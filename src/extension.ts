@@ -2,6 +2,7 @@
 // Import the module and reference it with the alias vscode in your code below
 import * as vscode from 'vscode';
 import type FileItem from './items/fileItem';
+import type FolderItem from './items/folderItem';
 import { OpenEditorsTreeProvider } from './openEditorsTreeProvider';
 import { findTab } from './utils/tabUtils';
 
@@ -13,7 +14,8 @@ export function activate(context: vscode.ExtensionContext) {
 		treeDataProvider: treeDataProvider,
 	});
 
-	vscode.window.tabGroups.onDidChangeTabs(treeDataProvider.refresh);
+	vscode.window.tabGroups.onDidChangeTabs(() => treeDataProvider.refresh());
+	vscode.window.tabGroups.onDidChangeTabGroups(() => treeDataProvider.refresh());
 
 	const closeFileCommand = vscode.commands.registerCommand(
 		'structuredOpenEditors.closeFile',
@@ -25,7 +27,17 @@ export function activate(context: vscode.ExtensionContext) {
 		unpinEditor,
 	);
 
-	context.subscriptions.push(treeView, closeFileCommand, unpinEditorCommand);
+	const closeFolderCommand = vscode.commands.registerCommand(
+		'structuredOpenEditors.closeFolder',
+		closeFolder,
+	);
+
+	context.subscriptions.push(
+		treeView,
+		closeFileCommand,
+		unpinEditorCommand,
+		closeFolderCommand,
+	);
 }
 
 // This method is called when your extension is deactivated
@@ -46,4 +58,15 @@ async function unpinEditor(item: FileItem) {
 			tab.input.uri,
 		);
 	}
+}
+
+async function closeFolder(item: FolderItem) {
+	const tabsToClose = vscode.window.tabGroups.all
+		.flatMap((group) => group.tabs)
+		.filter(
+			(tab) =>
+				tab.input instanceof vscode.TabInputText &&
+				tab.input.uri.fsPath.startsWith(item.resourceUri.fsPath),
+		);
+	await vscode.window.tabGroups.close(tabsToClose);
 }

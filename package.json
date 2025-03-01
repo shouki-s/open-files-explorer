@@ -21,6 +21,11 @@
 				"command": "structuredOpenEditors.unpinEditor",
 				"title": "Unpin",
 				"icon": "$(pinned)"
+			},
+			{
+				"command": "structuredOpenEditors.closeFolder",
+				"title": "Close All Editors in Folder",
+				"icon": "$(close-all)"
 			}
 		],
 		"views": {
@@ -44,6 +49,11 @@
 					"command": "structuredOpenEditors.unpinEditor",
 					"when": "view == structuredOpenEditors && viewItem =~ /pinnedFile/",
 					"group": "inline@2"
+				},
+				{
+					"command": "structuredOpenEditors.closeFolder",
+					"when": "view == structuredOpenEditors && viewItem == folder",
+					"group": "inline@1"
 				}
 			]
 		}
