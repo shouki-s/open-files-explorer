@@ -2,6 +2,7 @@ import * as assert from 'node:assert';
 import * as vscode from 'vscode';
 import FileItem from '../../../src/items/fileItem';
 import FolderItem from '../../../src/items/folderItem';
+import { toOpenedFileUri } from '../../../src/utils/uriUtils';
 
 suite('FolderItem Test Suite', () => {
 	test('FolderItemが正しく初期化される', () => {
@@ -12,7 +13,7 @@ suite('FolderItem Test Suite', () => {
 		const folderItem = new FolderItem(uri, label, children);
 
 		assert.strictEqual(folderItem.label, label);
-		assert.strictEqual(folderItem.resourceUri, uri);
+		assert.deepStrictEqual(folderItem.resourceUri, toOpenedFileUri(uri));
 		assert.strictEqual(
 			folderItem.collapsibleState,
 			vscode.TreeItemCollapsibleState.Expanded,

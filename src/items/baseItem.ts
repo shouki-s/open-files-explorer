@@ -1,5 +1,5 @@
 import * as vscode from 'vscode';
-
+import { toOpenedFileUri } from '../utils/uriUtils';
 export default abstract class BaseItem extends vscode.TreeItem {
 	public readonly resourceUri: vscode.Uri;
 
@@ -9,10 +9,7 @@ export default abstract class BaseItem extends vscode.TreeItem {
 		public readonly collapsibleState: vscode.TreeItemCollapsibleState,
 		public readonly children: BaseItem[] = [],
 	) {
-		const openedFileUri = vscode.Uri.from({
-			...originalResourceUri,
-			scheme: 'opened-file',
-		});
+		const openedFileUri = toOpenedFileUri(originalResourceUri);
 		super(openedFileUri, collapsibleState);
 		this.resourceUri = openedFileUri;
 		this.tooltip = label;

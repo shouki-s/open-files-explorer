@@ -3,6 +3,7 @@ import { closeFile, closeFolder, unpinEditor } from './commands/editorCommands';
 import { FileDecorationProvider } from './providers/fileDecorationProvider';
 import { OpenEditorsTreeProvider } from './providers/openEditorsTreeProvider';
 import { getAllTabs } from './utils/tabUtils';
+import { toOpenedFileUri } from './utils/uriUtils';
 
 export function activate(context: vscode.ExtensionContext): void {
 	const treeDataProvider = new OpenEditorsTreeProvider();
@@ -29,13 +30,7 @@ function registerEventHandlers(
 		treeDataProvider.refresh();
 		const changedUris = getAllTabs()
 			.filter((tab) => tab.input instanceof vscode.TabInputText)
-			.map((tab) => {
-				const uri = (tab.input as vscode.TabInputText).uri;
-				return vscode.Uri.from({
-					...uri,
-					scheme: 'opened-file',
-				});
-			});
+			.map((tab) => toOpenedFileUri((tab.input as vscode.TabInputText).uri));
 		decorationProvider.updateDecorations(changedUris);
 	});
 

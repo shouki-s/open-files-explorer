@@ -1,5 +1,6 @@
 import * as vscode from 'vscode';
 import { findTab } from '../utils/tabUtils';
+import { toFileUri } from '../utils/uriUtils';
 
 export class FileDecorationProvider implements vscode.FileDecorationProvider {
 	private readonly _onDidChangeFileDecorations: vscode.EventEmitter<
@@ -13,10 +14,7 @@ export class FileDecorationProvider implements vscode.FileDecorationProvider {
 			return undefined;
 		}
 
-		const fileUri = vscode.Uri.from({
-			...uri,
-			scheme: 'file',
-		});
+		const fileUri = toFileUri(uri);
 		const tab = findTab(fileUri);
 		if (!tab) {
 			return undefined;
