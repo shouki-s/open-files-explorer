@@ -30,7 +30,7 @@ Open Files Explorerは、現在開いているファイルを階層化してフ�
 
 ## 要件
 
-- Visual Studio Code バージョン 1.97.0 以上
+- Visual Studio Code バージョン 1.96.0 以上
 
 ## 拡張機能の設定
 

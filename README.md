@@ -30,7 +30,7 @@ The extension provides the following commands:
 
 ## Requirements
 
-- Visual Studio Code version 1.97.0 or higher
+- Visual Studio Code version 1.96.0 or higher
 
 ## Extension Settings
 
