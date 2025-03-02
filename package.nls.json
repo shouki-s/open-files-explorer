@@ -3,5 +3,6 @@
   "openFilesExplorer.contextualTitle": "Open Files Explorer",
   "openFilesExplorer.closeFile.title": "Close",
   "openFilesExplorer.unpinEditor.title": "Unpin Editor",
-  "openFilesExplorer.closeFolder.title": "Close All Editors in Folder"
+  "openFilesExplorer.closeFolder.title": "Close All Editors in Folder",
+  "openFilesExplorer.group.label": "(Group {0})"
 }
