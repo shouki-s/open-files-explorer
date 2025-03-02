@@ -20,16 +20,23 @@ export class FileDecorationProvider implements vscode.FileDecorationProvider {
 			return undefined;
 		}
 
+		if (tab.isPinned && tab.isDirty) {
+			return {
+				badge: '‡',
+				tooltip: 'ピン留め 変更済み',
+			};
+		}
+
 		if (tab.isPinned) {
 			return {
-				badge: 'P',
+				badge: '†',
 				tooltip: 'ピン留め',
 			};
 		}
 
 		if (tab.isDirty) {
 			return {
-				badge: 'M',
+				badge: '✱',
 				tooltip: '変更済み',
 			};
 		}
