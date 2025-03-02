@@ -5,6 +5,7 @@
   "repository": "https://github.com/shouki-s/open-files-explorer",
   "version": "0.0.1",
   "publisher": "shouki-s",
+  "packageManager": "pnpm@10.4.1",
   "engines": {
     "vscode": "^1.96.0"
   },
