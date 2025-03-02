@@ -17,11 +17,10 @@ export default class FileItem extends BaseItem {
 		};
 
 		// その他のプロパティを設定
-		const contextValues = ['file'];
+		this.contextValues = ['file'];
 		if (this.tab?.isPinned) {
-			contextValues.push('pinnedFile');
+			this.contextValues.push('pinnedFile');
 		}
-		this.contextValue = contextValues.join(' ');
 
 		// タブグループの情報を取得
 		const tabGroupIndex = this.tab?.group

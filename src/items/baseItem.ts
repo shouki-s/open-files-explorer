@@ -2,6 +2,7 @@ import * as vscode from 'vscode';
 import { toOpenedFileUri } from '../utils/uriUtils';
 export default abstract class BaseItem extends vscode.TreeItem {
 	public readonly resourceUri: vscode.Uri;
+	private _contextValues: string[] = [];
 
 	constructor(
 		public readonly originalResourceUri: vscode.Uri,
@@ -13,5 +14,14 @@ export default abstract class BaseItem extends vscode.TreeItem {
 		super(openedFileUri, collapsibleState);
 		this.resourceUri = openedFileUri;
 		this.tooltip = label;
+	}
+
+	protected get contextValues(): string[] {
+		return this._contextValues;
+	}
+
+	protected set contextValues(values: string[]) {
+		this._contextValues = values;
+		this.contextValue = this._contextValues.join(' ');
 	}
 }
