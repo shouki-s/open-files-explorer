@@ -14,17 +14,17 @@
     "commands": [
       {
         "command": "openFilesExplorer.closeFile",
-        "title": "Close",
+        "title": "%openFilesExplorer.closeFile.title%",
         "icon": "$(close)"
       },
       {
         "command": "openFilesExplorer.unpinEditor",
-        "title": "Unpin",
+        "title": "%openFilesExplorer.unpinEditor.title%",
         "icon": "$(pinned)"
       },
       {
         "command": "openFilesExplorer.closeFolder",
-        "title": "Close All Editors in Folder",
+        "title": "%openFilesExplorer.closeFolder.title%",
         "icon": "$(close-all)"
       }
     ],
@@ -32,9 +32,9 @@
       "explorer": [
         {
           "id": "openFilesExplorer",
-          "name": "Open Files Explorer",
+          "name": "%openFilesExplorer.name%",
           "icon": "media/icon.svg",
-          "contextualTitle": "Open Files Explorer"
+          "contextualTitle": "%openFilesExplorer.contextualTitle%"
         }
       ]
     },
