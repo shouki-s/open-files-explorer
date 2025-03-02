@@ -101,10 +101,8 @@ export class OpenFilesTreeProvider
       }
     }
 
-    // Create file item
     const fileItem = new FileItem(uri, uri.fsPath.split('/').pop() || '', tab)
 
-    // Add file to current node
     currentNode.items.push(fileItem)
   }
 

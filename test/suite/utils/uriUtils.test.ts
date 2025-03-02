@@ -10,7 +10,6 @@ suite('UriUtils Test Suite', () => {
   const testUri = Uri.file('/test/path/file.txt')
 
   test('toFileUri should convert any URI to file scheme', () => {
-    // Create URI with custom scheme
     const customUri = Uri.from({
       scheme: 'custom',
       path: testUri.path,
@@ -53,7 +52,6 @@ suite('UriUtils Test Suite', () => {
     const originalUri = Uri.file('/test/path/file.txt')
     const transformedUri = toOpenedFileUri(originalUri)
 
-    // Verify original URI is not modified
     assert.strictEqual(originalUri.scheme, 'file')
     assert.notStrictEqual(originalUri.scheme, transformedUri.scheme)
   })

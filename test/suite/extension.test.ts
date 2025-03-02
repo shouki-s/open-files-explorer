@@ -4,7 +4,6 @@ import { OpenFilesTreeProvider } from '../../src/providers/openFilesTreeProvider
 // import * as myExtension from '../../extension';
 
 suite('Extension Test Suite', function () {
-  // Set test timeout
   this.timeout(30000)
 
   vscode.window.showInformationMessage('Start all tests.')
@@ -24,14 +23,12 @@ suite('Extension Test Suite', function () {
   teardown(async () => {})
 
   test('Tree View is registered', async () => {
-    // Verify extension exists
     const extension = vscode.extensions.getExtension(
       'shouki-s.open-files-explorer',
     )
     assert.ok(extension, 'Extension should be registered')
     assert.ok(extension.isActive, 'Extension should be active')
 
-    // Verify tree view exists
     const treeView = vscode.window.createTreeView('openFilesExplorer', {
       treeDataProvider: new OpenFilesTreeProvider(),
     })

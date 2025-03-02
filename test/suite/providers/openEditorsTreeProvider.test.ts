@@ -7,20 +7,19 @@ suite('OpenEditorsTreeProvider Test Suite', () => {
   let provider: OpenFilesTreeProvider
 
   setup(async function () {
-    this.timeout(10000) // Set timeout to 10 seconds
+    this.timeout(10000)
     provider = new OpenFilesTreeProvider()
   })
 
   teardown(async function () {
-    this.timeout(10000) // Set timeout to 10 seconds
+    this.timeout(10000)
   })
 
   test('Tree items are created when editor is opened', async () => {
     await createTestEditor('test content', 'typescript')
-    provider.refresh() // Update tree
+    provider.refresh()
     const root = provider.getChildren()
 
-    // Only test if workspace folder exists
     if (
       vscode.workspace.workspaceFolders &&
       vscode.workspace.workspaceFolders.length > 0
@@ -28,7 +27,7 @@ suite('OpenEditorsTreeProvider Test Suite', () => {
       assert.strictEqual(root.length, 1)
       const folder = root[0]
       const children = provider.getChildren(folder)
-      assert.strictEqual(children.length, 1) // One file
+      assert.strictEqual(children.length, 1)
       assert.strictEqual(children[0].label, 'Untitled-1')
     }
   })

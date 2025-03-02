@@ -3,7 +3,6 @@ import { runTests } from '@vscode/test-electron'
 
 async function main() {
   try {
-    // Path to the workspace where tests will be run
     const projectRoot = path.resolve(__dirname, '../')
     const extensionDevelopmentPath = projectRoot
     const extensionTestsPath = path.resolve(projectRoot, 'out/test/suite/index')
@@ -14,7 +13,6 @@ async function main() {
     console.log('Extension tests path:', extensionTestsPath)
     console.log('Workspace path:', workspacePath)
 
-    // Run tests
     await runTests({
       extensionDevelopmentPath,
       extensionTestsPath,
