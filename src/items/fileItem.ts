@@ -9,18 +9,18 @@ export default class FileItem extends BaseItem {
 	) {
 		super(resourceUri, label, vscode.TreeItemCollapsibleState.None);
 
+		// コンテキストを設定
+		this.contexts = [Context.File];
+		if (this.tab?.isPinned) {
+			this.contexts.push(Context.PinnedFile);
+		}
+
 		// ファイルを開くコマンドを設定
 		this.command = {
 			command: 'vscode.open',
 			title: 'Open File',
 			arguments: [this.originalResourceUri],
 		};
-
-		// その他のプロパティを設定
-		this.contexts = [Context.File];
-		if (this.tab?.isPinned) {
-			this.contexts.push(Context.PinnedFile);
-		}
 
 		// タブグループの情報を取得
 		const tabGroupIndex = this.tab?.group
