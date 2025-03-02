@@ -5,7 +5,7 @@ import FolderItem from '../../../src/items/folderItem'
 import type { UriTab } from '../../../src/utils/tabUtils'
 import { toOpenedFileUri } from '../../../src/utils/uriUtils'
 suite('FolderItem Test Suite', () => {
-  test('FolderItemが正しく初期化される', () => {
+  test('FolderItem is correctly initialized', () => {
     const uri = vscode.Uri.file('/test/folder')
     const label = 'folder'
     const children: FileItem[] = []
@@ -21,7 +21,7 @@ suite('FolderItem Test Suite', () => {
     assert.strictEqual(folderItem.contextValue, 'folder')
   })
 
-  test('子アイテムが正しく設定される', () => {
+  test('Child items are correctly set', () => {
     const uri = vscode.Uri.file('/test/folder')
     const label = 'folder'
 
@@ -40,7 +40,7 @@ suite('FolderItem Test Suite', () => {
     assert.strictEqual(folderItem.children[0], fileItem)
   })
 
-  test('空のフォルダは折りたたまれた状態で初期化される', () => {
+  test('Empty folders are initialized in expanded state', () => {
     const uri = vscode.Uri.file('/test/folder')
     const label = 'folder'
     const children: FileItem[] = []

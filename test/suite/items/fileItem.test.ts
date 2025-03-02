@@ -5,7 +5,7 @@ import type { UriTab } from '../../../src/utils/tabUtils'
 import { toOpenedFileUri } from '../../../src/utils/uriUtils'
 
 suite('FileItem Test Suite', () => {
-  test('FileItemが正しく初期化される', () => {
+  test('FileItem is correctly initialized', () => {
     const uri = vscode.Uri.file('/test/file.ts')
     const label = 'file.ts'
     const tab = {
@@ -25,7 +25,7 @@ suite('FileItem Test Suite', () => {
     assert.strictEqual(fileItem.contextValue, 'file')
   })
 
-  test('コマンドが正しく設定される', () => {
+  test('Command is correctly set', () => {
     const uri = vscode.Uri.file('/test/file.ts')
     const label = 'file.ts'
     const tab = {
