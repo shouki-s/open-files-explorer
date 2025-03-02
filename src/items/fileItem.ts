@@ -15,11 +15,10 @@ export default class FileItem extends BaseItem {
 			this.contexts.push(Context.PinnedFile);
 		}
 
-		// タブをフォーカスするコマンドを設定
 		this.command = {
-			command: 'vscode.tabGroups.focus',
-			title: 'Focus Tab',
-			arguments: [this.tab],
+			command: 'vscode.open',
+			title: 'Open File',
+			arguments: [this.originalResourceUri],
 		};
 
 		// タブグループの情報を取得
