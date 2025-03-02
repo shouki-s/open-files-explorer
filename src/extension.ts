@@ -61,14 +61,14 @@ export function activate(context: vscode.ExtensionContext) {
 export function deactivate() {}
 
 async function closeFile(item: FileItem) {
-	const tab = findTab(item.resourceUri);
+	const tab = findTab(item.originalResourceUri);
 	if (tab) {
 		await vscode.window.tabGroups.close(tab);
 	}
 }
 
 async function unpinEditor(item: FileItem) {
-	const tab = findTab(item.resourceUri);
+	const tab = findTab(item.originalResourceUri);
 	if (tab?.input instanceof vscode.TabInputText) {
 		await vscode.commands.executeCommand(
 			'workbench.action.unpinEditor',
@@ -83,7 +83,7 @@ async function closeFolder(item: FolderItem) {
 		.filter(
 			(tab) =>
 				tab.input instanceof vscode.TabInputText &&
-				tab.input.uri.fsPath.startsWith(item.resourceUri.fsPath) &&
+				tab.input.uri.fsPath.startsWith(item.originalResourceUri.fsPath) &&
 				!tab.isPinned,
 		);
 	await vscode.window.tabGroups.close(tabsToClose);

@@ -13,7 +13,7 @@ export default class FileItem extends BaseItem {
 		this.command = {
 			command: 'vscode.open',
 			title: 'Open File',
-			arguments: [this.resourceUri],
+			arguments: [this.originalResourceUri],
 		};
 
 		// その他のプロパティを設定
