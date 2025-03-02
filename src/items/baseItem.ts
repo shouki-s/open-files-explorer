@@ -1,8 +1,15 @@
 import * as vscode from 'vscode';
 import { toOpenedFileUri } from '../utils/uriUtils';
+
+export enum Context {
+	File = 'file',
+	Folder = 'folder',
+	PinnedFile = 'pinnedFile',
+}
+
 export default abstract class BaseItem extends vscode.TreeItem {
 	public readonly resourceUri: vscode.Uri;
-	private _contextValues: string[] = [];
+	private _contexts: Context[] = [];
 
 	constructor(
 		public readonly originalResourceUri: vscode.Uri,
@@ -16,12 +23,12 @@ export default abstract class BaseItem extends vscode.TreeItem {
 		this.tooltip = label;
 	}
 
-	protected get contextValues(): string[] {
-		return this._contextValues;
+	protected get contexts(): Context[] {
+		return this._contexts;
 	}
 
-	protected set contextValues(values: string[]) {
-		this._contextValues = values;
-		this.contextValue = this._contextValues.join(' ');
+	protected set contexts(values: Context[]) {
+		this._contexts = values;
+		this.contextValue = this._contexts.join(' ');
 	}
 }

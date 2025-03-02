@@ -1,5 +1,5 @@
 import * as vscode from 'vscode';
-import BaseItem from './baseItem';
+import BaseItem, { Context } from './baseItem';
 
 export default class FolderItem extends BaseItem {
 	constructor(resourceUri: vscode.Uri, label: string, children: BaseItem[]) {
@@ -9,6 +9,6 @@ export default class FolderItem extends BaseItem {
 			vscode.TreeItemCollapsibleState.Expanded,
 			children,
 		);
-		this.contextValues = ['folder'];
+		this.contexts = [Context.Folder];
 	}
 }

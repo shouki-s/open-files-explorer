@@ -1,5 +1,5 @@
 import * as vscode from 'vscode';
-import BaseItem from './baseItem';
+import BaseItem, { Context } from './baseItem';
 
 export default class FileItem extends BaseItem {
 	constructor(
@@ -17,9 +17,9 @@ export default class FileItem extends BaseItem {
 		};
 
 		// その他のプロパティを設定
-		this.contextValues = ['file'];
+		this.contexts = [Context.File];
 		if (this.tab?.isPinned) {
-			this.contextValues.push('pinnedFile');
+			this.contexts.push(Context.PinnedFile);
 		}
 
 		// タブグループの情報を取得
