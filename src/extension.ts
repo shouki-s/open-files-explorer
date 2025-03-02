@@ -1,8 +1,6 @@
 import * as vscode from 'vscode';
 import { closeFile, closeFolder, unpinEditor } from './commands/editorCommands';
 import { OpenFilesTreeProvider } from './providers/openFilesTreeProvider';
-import { getAllTabs } from './utils/tabUtils';
-import { toOpenedFileUri } from './utils/uriUtils';
 
 export function activate(context: vscode.ExtensionContext): void {
 	const treeDataProvider = new OpenFilesTreeProvider();
