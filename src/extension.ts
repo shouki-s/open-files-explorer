@@ -1,6 +1,5 @@
 import * as vscode from 'vscode';
 import { closeFile, closeFolder, unpinEditor } from './commands/editorCommands';
-import { FileDecorationProvider } from './providers/fileDecorationProvider';
 import { OpenEditorsTreeProvider } from './providers/openEditorsTreeProvider';
 import { getAllTabs } from './utils/tabUtils';
 import { toOpenedFileUri } from './utils/uriUtils';
@@ -8,30 +7,17 @@ import { toOpenedFileUri } from './utils/uriUtils';
 export function activate(context: vscode.ExtensionContext): void {
 	const treeDataProvider = new OpenEditorsTreeProvider();
 	const treeView = vscode.window.createTreeView('structuredOpenEditors', {
-		treeDataProvider: treeDataProvider,
+		treeDataProvider,
 	});
-
-	const decorationProvider = new FileDecorationProvider();
-
-	registerEventHandlers(treeDataProvider, decorationProvider);
+	registerEventHandlers(treeDataProvider);
 	registerCommands(context);
-
-	context.subscriptions.push(
-		treeView,
-		vscode.window.registerFileDecorationProvider(decorationProvider),
-	);
+	context.subscriptions.push(treeView);
 }
-
 function registerEventHandlers(
-	treeDataProvider: OpenEditorsTreeProvider,
-	decorationProvider: FileDecorationProvider,
+	treeDataProvider: OpenEditorsTreeProvider
 ): void {
 	vscode.window.tabGroups.onDidChangeTabs(() => {
 		treeDataProvider.refresh();
-		const changedUris = getAllTabs()
-			.filter((tab) => tab.input instanceof vscode.TabInputText)
-			.map((tab) => toOpenedFileUri((tab.input as vscode.TabInputText).uri));
-		decorationProvider.updateDecorations(changedUris);
 	});
 
 	vscode.window.tabGroups.onDidChangeTabGroups(() =>

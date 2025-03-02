@@ -24,8 +24,15 @@ export default class FileItem extends BaseItem {
 			: 0;
 
 		// descriptionを構築
+		this.description = '';
+		if (this.tab.isDirty) {
+			this.description += '●';
+		}
+		if (this.tab.isPinned) {
+			this.description += '†';
+		}
 		if (vscode.window.tabGroups.all.length > 1 && tabGroupIndex > 0) {
-			this.description = `(Group ${tabGroupIndex})`;
+			this.description += `(Group ${tabGroupIndex})`;
 		}
 	}
 }
