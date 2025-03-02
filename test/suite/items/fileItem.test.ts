@@ -1,6 +1,7 @@
 import * as assert from 'node:assert';
 import * as vscode from 'vscode';
 import FileItem from '../../../src/items/fileItem';
+import type { UriTab } from '../../../src/utils/tabUtils';
 import { toOpenedFileUri } from '../../../src/utils/uriUtils';
 
 suite('FileItem Test Suite', () => {
@@ -11,7 +12,7 @@ suite('FileItem Test Suite', () => {
 			input: {
 				uri,
 			},
-		} as vscode.Tab;
+		} as UriTab;
 
 		const fileItem = new FileItem(uri, label, tab);
 
@@ -31,7 +32,7 @@ suite('FileItem Test Suite', () => {
 			input: {
 				uri,
 			},
-		} as vscode.Tab;
+		} as UriTab;
 
 		const fileItem = new FileItem(uri, label, tab);
 

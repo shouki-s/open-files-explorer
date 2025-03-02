@@ -2,8 +2,8 @@ import * as assert from 'node:assert';
 import * as vscode from 'vscode';
 import FileItem from '../../../src/items/fileItem';
 import FolderItem from '../../../src/items/folderItem';
+import type { UriTab } from '../../../src/utils/tabUtils';
 import { toOpenedFileUri } from '../../../src/utils/uriUtils';
-
 suite('FolderItem Test Suite', () => {
 	test('FolderItemが正しく初期化される', () => {
 		const uri = vscode.Uri.file('/test/folder');
@@ -30,7 +30,7 @@ suite('FolderItem Test Suite', () => {
 			input: {
 				uri: fileUri,
 			},
-		} as vscode.Tab;
+		} as UriTab;
 		const fileItem = new FileItem(fileUri, 'file.ts', fileTab);
 
 		const children = [fileItem];
