@@ -10,10 +10,7 @@ export default class FileItem extends BaseItem {
 		super(resourceUri, label, vscode.TreeItemCollapsibleState.None);
 
 		// コンテキストを設定
-		this.contexts = [Context.File];
-		if (this.tab.isPinned) {
-			this.contexts.push(Context.PinnedFile);
-		}
+		this.contextValue = this.tab.isPinned ? Context.PinnedFile : Context.File;
 
 		this.command = {
 			command: 'vscode.open',

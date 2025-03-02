@@ -9,6 +9,6 @@ export default class FolderItem extends BaseItem {
 			vscode.TreeItemCollapsibleState.Expanded,
 			children,
 		);
-		this.contexts = [Context.Folder];
+		this.contextValue = Context.Folder;
 	}
 }
