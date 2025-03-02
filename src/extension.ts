@@ -1,28 +1,32 @@
-// The module 'vscode' contains the VS Code extensibility API
-// Import the module and reference it with the alias vscode in your code below
 import * as vscode from 'vscode';
-import type FileItem from './items/fileItem';
-import type FolderItem from './items/folderItem';
+import { closeFile, closeFolder, unpinEditor } from './commands/editorCommands';
 import { FileDecorationProvider } from './providers/fileDecorationProvider';
 import { OpenEditorsTreeProvider } from './providers/openEditorsTreeProvider';
-import { findTab, getAllTabs } from './utils/tabUtils';
+import { getAllTabs } from './utils/tabUtils';
 
-// This method is called when your extension is activated
-// Your extension is activated the very first time the command is executed
-export function activate(context: vscode.ExtensionContext) {
+export function activate(context: vscode.ExtensionContext): void {
 	const treeDataProvider = new OpenEditorsTreeProvider();
 	const treeView = vscode.window.createTreeView('structuredOpenEditors', {
 		treeDataProvider: treeDataProvider,
 	});
 
 	const decorationProvider = new FileDecorationProvider();
+
+	registerEventHandlers(treeDataProvider, decorationProvider);
+	registerCommands(context);
+
 	context.subscriptions.push(
+		treeView,
 		vscode.window.registerFileDecorationProvider(decorationProvider),
 	);
+}
 
+function registerEventHandlers(
+	treeDataProvider: OpenEditorsTreeProvider,
+	decorationProvider: FileDecorationProvider,
+): void {
 	vscode.window.tabGroups.onDidChangeTabs(() => {
 		treeDataProvider.refresh();
-		// 変更されたタブのURIを取得して装飾を更新
 		const changedUris = getAllTabs()
 			.filter((tab) => tab.input instanceof vscode.TabInputText)
 			.map((tab) => {
@@ -38,58 +42,23 @@ export function activate(context: vscode.ExtensionContext) {
 	vscode.window.tabGroups.onDidChangeTabGroups(() =>
 		treeDataProvider.refresh(),
 	);
+}
 
-	const closeFileCommand = vscode.commands.registerCommand(
-		'structuredOpenEditors.closeFile',
-		closeFile,
-	);
-
-	const unpinEditorCommand = vscode.commands.registerCommand(
-		'structuredOpenEditors.unpinEditor',
-		unpinEditor,
-	);
-
-	const closeFolderCommand = vscode.commands.registerCommand(
-		'structuredOpenEditors.closeFolder',
-		closeFolder,
-	);
-
+function registerCommands(context: vscode.ExtensionContext): void {
 	context.subscriptions.push(
-		treeView,
-		closeFileCommand,
-		unpinEditorCommand,
-		closeFolderCommand,
+		vscode.commands.registerCommand(
+			'structuredOpenEditors.closeFile',
+			closeFile,
+		),
+		vscode.commands.registerCommand(
+			'structuredOpenEditors.unpinEditor',
+			unpinEditor,
+		),
+		vscode.commands.registerCommand(
+			'structuredOpenEditors.closeFolder',
+			closeFolder,
+		),
 	);
 }
 
-// This method is called when your extension is deactivated
-export function deactivate() {}
-
-async function closeFile(item: FileItem) {
-	const tab = findTab(item.originalResourceUri);
-	if (tab) {
-		await vscode.window.tabGroups.close(tab);
-	}
-}
-
-async function unpinEditor(item: FileItem) {
-	const tab = findTab(item.originalResourceUri);
-	if (tab?.input instanceof vscode.TabInputText) {
-		await vscode.commands.executeCommand(
-			'workbench.action.unpinEditor',
-			tab.input.uri,
-		);
-	}
-}
-
-async function closeFolder(item: FolderItem) {
-	const tabsToClose = vscode.window.tabGroups.all
-		.flatMap((group) => group.tabs)
-		.filter(
-			(tab) =>
-				tab.input instanceof vscode.TabInputText &&
-				tab.input.uri.fsPath.startsWith(item.originalResourceUri.fsPath) &&
-				!tab.isPinned,
-		);
-	await vscode.window.tabGroups.close(tabsToClose);
-}
+export function deactivate(): void {}
