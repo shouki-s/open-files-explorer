@@ -1,6 +1,7 @@
 // The module 'vscode' contains the VS Code extensibility API
 // Import the module and reference it with the alias vscode in your code below
 import * as vscode from 'vscode';
+import { FileDecorationProvider } from './fileDecorationProvider';
 import type FileItem from './items/fileItem';
 import type FolderItem from './items/folderItem';
 import { OpenEditorsTreeProvider } from './openEditorsTreeProvider';
@@ -14,8 +15,24 @@ export function activate(context: vscode.ExtensionContext) {
 		treeDataProvider: treeDataProvider,
 	});
 
-	vscode.window.tabGroups.onDidChangeTabs(() => treeDataProvider.refresh());
-	vscode.window.tabGroups.onDidChangeTabGroups(() => treeDataProvider.refresh());
+	const decorationProvider = new FileDecorationProvider();
+	context.subscriptions.push(
+		vscode.window.registerFileDecorationProvider(decorationProvider),
+	);
+
+	vscode.window.tabGroups.onDidChangeTabs(() => {
+		treeDataProvider.refresh();
+		// 変更されたタブのURIを取得して装飾を更新
+		const changedUris = vscode.window.tabGroups.all
+			.flatMap((group) => group.tabs)
+			.filter((tab) => tab.input instanceof vscode.TabInputText)
+			.map((tab) => (tab.input as vscode.TabInputText).uri);
+		decorationProvider.updateDecorations(changedUris);
+	});
+
+	vscode.window.tabGroups.onDidChangeTabGroups(() =>
+		treeDataProvider.refresh(),
+	);
 
 	const closeFileCommand = vscode.commands.registerCommand(
 		'structuredOpenEditors.closeFile',
@@ -67,7 +84,7 @@ async function closeFolder(item: FolderItem) {
 			(tab) =>
 				tab.input instanceof vscode.TabInputText &&
 				tab.input.uri.fsPath.startsWith(item.resourceUri.fsPath) &&
-				!tab.isPinned
+				!tab.isPinned,
 		);
 	await vscode.window.tabGroups.close(tabsToClose);
 }
