@@ -32,7 +32,7 @@ export class OpenFilesTreeProvider
     if (element) {
       return element.children
     }
-    // ルートレベル：フォルダ構造を構築
+    // Root level: Build folder structure
     return this.getRootItems()
   }
 
@@ -84,7 +84,7 @@ export class OpenFilesTreeProvider
     const parts = relativePath.split(path.sep)
 
     let currentNode = root
-    // フォルダ構造を構築
+    // Build folder structure
     for (let i = 0; i < parts.length - 1; i++) {
       const folderName = parts[i]
       const existingNode = currentNode.children.get(folderName)
@@ -101,15 +101,15 @@ export class OpenFilesTreeProvider
       }
     }
 
-    // ファイルアイテムを作成
+    // Create file item
     const fileItem = new FileItem(uri, uri.fsPath.split('/').pop() || '', tab)
 
-    // ファイルを現在のノードに追加
+    // Add file to current node
     currentNode.items.push(fileItem)
   }
 
   private compactFolders(node: FileTreeNode): FileTreeNode {
-    // 単一の子フォルダを持ち、ファイルを持たない場合はコンパクト化
+    // Compact if node has a single child folder and no files
     if (node.items.length === 0 && node.children.size === 1) {
       const [childName, childNode] = Array.from(node.children.entries())[0]
       const newNode: FileTreeNode = {

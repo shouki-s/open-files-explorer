@@ -7,20 +7,20 @@ suite('OpenEditorsTreeProvider Test Suite', () => {
   let provider: OpenFilesTreeProvider
 
   setup(async function () {
-    this.timeout(10000) // タイムアウトを10秒に設定
+    this.timeout(10000) // Set timeout to 10 seconds
     provider = new OpenFilesTreeProvider()
   })
 
   teardown(async function () {
-    this.timeout(10000) // タイムアウトを10秒に設定
+    this.timeout(10000) // Set timeout to 10 seconds
   })
 
-  test('エディタを開くとツリーアイテムが作成される', async () => {
+  test('Tree items are created when editor is opened', async () => {
     await createTestEditor('test content', 'typescript')
-    provider.refresh() // ツリーを更新
+    provider.refresh() // Update tree
     const root = provider.getChildren()
 
-    // ワークスペースフォルダが存在する場合のみテスト
+    // Only test if workspace folder exists
     if (
       vscode.workspace.workspaceFolders &&
       vscode.workspace.workspaceFolders.length > 0
@@ -28,12 +28,12 @@ suite('OpenEditorsTreeProvider Test Suite', () => {
       assert.strictEqual(root.length, 1)
       const folder = root[0]
       const children = provider.getChildren(folder)
-      assert.strictEqual(children.length, 1) // 1つのファイル
+      assert.strictEqual(children.length, 1) // One file
       assert.strictEqual(children[0].label, 'Untitled-1')
     }
   })
 
-  test('TreeItemが正しく取得できる', async () => {
+  test('TreeItem is correctly retrieved', async () => {
     await createTestEditor('test content', 'typescript')
     provider.refresh()
     const root = provider.getChildren()
@@ -51,7 +51,7 @@ suite('OpenEditorsTreeProvider Test Suite', () => {
     }
   })
 
-  test('エディタを閉じるとツリーアイテムが削除される', async () => {
+  test('Tree items are removed when editor is closed', async () => {
     await createTestEditor('test content')
     provider.refresh()
     let root = provider.getChildren()

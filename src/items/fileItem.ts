@@ -10,7 +10,7 @@ export default class FileItem extends BaseItem {
   ) {
     super(resourceUri, label, vscode.TreeItemCollapsibleState.None)
 
-    // コンテキストを設定
+    // Set context
     this.contextValue = this.tab.isPinned ? Context.PinnedFile : Context.File
 
     this.command = {
@@ -19,7 +19,7 @@ export default class FileItem extends BaseItem {
       arguments: [this.originalResourceUri],
     }
 
-    // descriptionを構築
+    // Build description
     this.setDescription()
   }
 

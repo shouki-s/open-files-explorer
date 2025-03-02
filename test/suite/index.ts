@@ -3,7 +3,7 @@ import glob from 'glob'
 import Mocha from 'mocha'
 
 export function run(): Promise<void> {
-  // テストモジュールのパスを作成
+  // Create test module path
   const mocha = new Mocha({
     ui: 'tdd',
     color: true,
@@ -20,13 +20,13 @@ export function run(): Promise<void> {
           return e(err)
         }
 
-        // テストファイルを追加
+        // Add test files
         for (const f of files) {
           mocha.addFile(path.resolve(testsRoot, f))
         }
 
         try {
-          // テストを実行
+          // Run tests
           mocha.run((failures: number) => {
             if (failures > 0) {
               e(new Error(`${failures} tests failed.`))
