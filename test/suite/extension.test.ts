@@ -1,6 +1,6 @@
 import * as assert from 'node:assert';
 import * as vscode from 'vscode';
-import { OpenEditorsTreeProvider } from '../../src/openEditorsTreeProvider';
+import { OpenEditorsTreeProvider } from '../../src/providers/openEditorsTreeProvider';
 // import * as myExtension from '../../extension';
 
 suite('Extension Test Suite', function () {

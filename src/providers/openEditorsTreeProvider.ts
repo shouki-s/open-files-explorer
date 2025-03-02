@@ -1,9 +1,9 @@
 import * as path from 'node:path';
 import * as vscode from 'vscode';
-import type BaseItem from './items/baseItem';
-import FileItem from './items/fileItem';
-import FolderItem from './items/folderItem';
-import { getWorkspaceOpenEditorTabs } from './utils/tabUtils';
+import type BaseItem from '../items/baseItem';
+import FileItem from '../items/fileItem';
+import FolderItem from '../items/folderItem';
+import { getWorkspaceOpenEditorTabs } from '../utils/tabUtils';
 
 interface FileTreeNode {
 	name: string;

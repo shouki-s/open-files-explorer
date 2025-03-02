@@ -3,8 +3,8 @@
 import * as vscode from 'vscode';
 import type FileItem from './items/fileItem';
 import type FolderItem from './items/folderItem';
-import { OpenEditorsTreeProvider } from './openEditorsTreeProvider';
 import { FileDecorationProvider } from './providers/fileDecorationProvider';
+import { OpenEditorsTreeProvider } from './providers/openEditorsTreeProvider';
 import { findTab } from './utils/tabUtils';
 
 // This method is called when your extension is activated
