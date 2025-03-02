@@ -11,7 +11,7 @@ interface FileTreeNode {
 	items: FileItem[];
 }
 
-export class OpenEditorsTreeProvider
+export class OpenFilesTreeProvider
 	implements vscode.TreeDataProvider<BaseItem>
 {
 	private _onDidChangeTreeData: vscode.EventEmitter<

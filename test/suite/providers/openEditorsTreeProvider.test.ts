@@ -1,14 +1,14 @@
 import * as assert from 'node:assert';
 import * as vscode from 'vscode';
-import { OpenEditorsTreeProvider } from '../../../src/providers/openEditorsTreeProvider';
+import { OpenFilesTreeProvider } from '../../../src/providers/openFilesTreeProvider';
 import { createTestEditor } from '../../helpers/testUtils';
 
 suite('OpenEditorsTreeProvider Test Suite', () => {
-	let provider: OpenEditorsTreeProvider;
+	let provider: OpenFilesTreeProvider;
 
 	setup(async function () {
 		this.timeout(10000); // タイムアウトを10秒に設定
-		provider = new OpenEditorsTreeProvider();
+		provider = new OpenFilesTreeProvider();
 	});
 
 	teardown(async function () {

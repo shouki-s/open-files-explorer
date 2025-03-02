@@ -1,11 +1,11 @@
 import * as vscode from 'vscode';
 import { closeFile, closeFolder, unpinEditor } from './commands/editorCommands';
-import { OpenEditorsTreeProvider } from './providers/openEditorsTreeProvider';
+import { OpenFilesTreeProvider } from './providers/openFilesTreeProvider';
 import { getAllTabs } from './utils/tabUtils';
 import { toOpenedFileUri } from './utils/uriUtils';
 
 export function activate(context: vscode.ExtensionContext): void {
-	const treeDataProvider = new OpenEditorsTreeProvider();
+	const treeDataProvider = new OpenFilesTreeProvider();
 	const treeView = vscode.window.createTreeView('openFilesExplorer', {
 		treeDataProvider,
 	});
@@ -13,9 +13,7 @@ export function activate(context: vscode.ExtensionContext): void {
 	registerCommands(context);
 	context.subscriptions.push(treeView);
 }
-function registerEventHandlers(
-	treeDataProvider: OpenEditorsTreeProvider,
-): void {
+function registerEventHandlers(treeDataProvider: OpenFilesTreeProvider): void {
 	vscode.window.tabGroups.onDidChangeTabs(() => {
 		treeDataProvider.refresh();
 	});

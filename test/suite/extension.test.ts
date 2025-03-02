@@ -1,6 +1,6 @@
 import * as assert from 'node:assert';
 import * as vscode from 'vscode';
-import { OpenEditorsTreeProvider } from '../../src/providers/openEditorsTreeProvider';
+import { OpenFilesTreeProvider } from '../../src/providers/openFilesTreeProvider';
 // import * as myExtension from '../../extension';
 
 suite('Extension Test Suite', function () {
@@ -33,7 +33,7 @@ suite('Extension Test Suite', function () {
 
 		// ツリービューの存在を確認
 		const treeView = vscode.window.createTreeView('openFilesExplorer', {
-			treeDataProvider: new OpenEditorsTreeProvider(),
+			treeDataProvider: new OpenFilesTreeProvider(),
 		});
 		assert.ok(treeView, 'Tree view should be created');
 	});
