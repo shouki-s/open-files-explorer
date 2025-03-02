@@ -5,7 +5,7 @@ import type FileItem from './items/fileItem';
 import type FolderItem from './items/folderItem';
 import { FileDecorationProvider } from './providers/fileDecorationProvider';
 import { OpenEditorsTreeProvider } from './providers/openEditorsTreeProvider';
-import { findTab } from './utils/tabUtils';
+import { findTab, getAllTabs } from './utils/tabUtils';
 
 // This method is called when your extension is activated
 // Your extension is activated the very first time the command is executed
@@ -23,10 +23,15 @@ export function activate(context: vscode.ExtensionContext) {
 	vscode.window.tabGroups.onDidChangeTabs(() => {
 		treeDataProvider.refresh();
 		// 変更されたタブのURIを取得して装飾を更新
-		const changedUris = vscode.window.tabGroups.all
-			.flatMap((group) => group.tabs)
+		const changedUris = getAllTabs()
 			.filter((tab) => tab.input instanceof vscode.TabInputText)
-			.map((tab) => (tab.input as vscode.TabInputText).uri);
+			.map((tab) => {
+				const uri = (tab.input as vscode.TabInputText).uri;
+				return vscode.Uri.from({
+					...uri,
+					scheme: 'opened-file',
+				});
+			});
 		decorationProvider.updateDecorations(changedUris);
 	});
 

@@ -9,7 +9,15 @@ export class FileDecorationProvider implements vscode.FileDecorationProvider {
 		this._onDidChangeFileDecorations.event;
 
 	provideFileDecoration(uri: vscode.Uri): vscode.FileDecoration | undefined {
-		const tab = findTab(uri);
+		if (uri.scheme !== 'opened-file') {
+			return undefined;
+		}
+
+		const fileUri = vscode.Uri.from({
+			...uri,
+			scheme: 'file',
+		});
+		const tab = findTab(fileUri);
 		if (!tab) {
 			return undefined;
 		}

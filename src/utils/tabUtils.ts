@@ -1,6 +1,6 @@
 import * as vscode from 'vscode';
 
-function getAllTabs(): vscode.Tab[] {
+export function getAllTabs(): vscode.Tab[] {
 	return vscode.window.tabGroups.all.flatMap((group) => group.tabs);
 }
 
