@@ -23,29 +23,14 @@ export default class FileItem extends BaseItem {
 		}
 		this.contextValue = contextValues.join(' ');
 
-		// ステータスアイコンを追加
-		const statusIcons = [];
-		if (this.tab?.isDirty) {
-			statusIcons.push('●');
-		}
-		if (this.tab?.isPinned) {
-			statusIcons.push('📌');
-		}
-
 		// タブグループの情報を取得
 		const tabGroupIndex = this.tab?.group
 			? vscode.window.tabGroups.all.indexOf(this.tab.group) + 1
 			: 0;
 
 		// descriptionを構築
-		const description = [];
-		if (statusIcons.length > 0) {
-			description.push(statusIcons.join(' '));
-		}
 		if (vscode.window.tabGroups.all.length > 1 && tabGroupIndex > 0) {
-			description.push(`(Group ${tabGroupIndex})`);
+			this.description = `(Group ${tabGroupIndex})`;
 		}
-
-		this.description = description.join(' ');
 	}
 }
