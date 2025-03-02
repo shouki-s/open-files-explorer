@@ -1,5 +1,5 @@
 import * as vscode from 'vscode';
-import { findTab } from './utils/tabUtils';
+import { findTab } from '../utils/tabUtils';
 
 export class FileDecorationProvider implements vscode.FileDecorationProvider {
 	private readonly _onDidChangeFileDecorations: vscode.EventEmitter<
