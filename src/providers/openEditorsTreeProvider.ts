@@ -3,7 +3,7 @@ import * as vscode from 'vscode';
 import type BaseItem from '../items/baseItem';
 import FileItem from '../items/fileItem';
 import FolderItem from '../items/folderItem';
-import { getWorkspaceOpenEditorTabs } from '../utils/tabUtils';
+import { type UriTab, getWorkspaceOpenEditorTabs } from '../utils/tabUtils';
 
 interface FileTreeNode {
 	name: string;
@@ -79,10 +79,10 @@ export class OpenEditorsTreeProvider
 	private addFileToTree(
 		root: FileTreeNode,
 		workspaceRoot: string,
-		tab: vscode.Tab,
+		tab: UriTab,
 	): void {
-		const input = tab.input as vscode.TabInputText;
-		const relativePath = path.relative(workspaceRoot, input.uri.fsPath);
+		const uri = tab.input.uri;
+		const relativePath = path.relative(workspaceRoot, uri.fsPath);
 		const parts = relativePath.split(path.sep);
 
 		let currentNode = root;
@@ -104,11 +104,7 @@ export class OpenEditorsTreeProvider
 		}
 
 		// ファイルアイテムを作成
-		const fileItem = new FileItem(
-			input.uri,
-			input.uri.fsPath.split('/').pop() || '',
-			tab,
-		);
+		const fileItem = new FileItem(uri, uri.fsPath.split('/').pop() || '', tab);
 
 		// ファイルを現在のノードに追加
 		currentNode.items.push(fileItem);

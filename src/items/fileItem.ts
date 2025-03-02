@@ -1,11 +1,12 @@
 import * as vscode from 'vscode';
+import type { UriTab } from '../utils/tabUtils';
 import BaseItem, { Context } from './baseItem';
 
 export default class FileItem extends BaseItem {
 	constructor(
 		resourceUri: vscode.Uri,
 		label: string,
-		public readonly tab: vscode.Tab,
+		public readonly tab: UriTab,
 	) {
 		super(resourceUri, label, vscode.TreeItemCollapsibleState.None);
 
