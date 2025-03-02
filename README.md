@@ -1,6 +1,6 @@
-# structured-open-editors README
+# open-files-explorer README
 
-This is the README for your extension "structured-open-editors". After writing up a brief description, we recommend including the following sections.
+This is the README for your extension "open-files-explorer". After writing up a brief description, we recommend including the following sections.
 
 ## Features
 

@@ -6,7 +6,7 @@ import { toOpenedFileUri } from './utils/uriUtils';
 
 export function activate(context: vscode.ExtensionContext): void {
 	const treeDataProvider = new OpenEditorsTreeProvider();
-	const treeView = vscode.window.createTreeView('structuredOpenEditors', {
+	const treeView = vscode.window.createTreeView('openFilesExplorer', {
 		treeDataProvider,
 	});
 	registerEventHandlers(treeDataProvider);
@@ -27,16 +27,13 @@ function registerEventHandlers(
 
 function registerCommands(context: vscode.ExtensionContext): void {
 	context.subscriptions.push(
+		vscode.commands.registerCommand('openFilesExplorer.closeFile', closeFile),
 		vscode.commands.registerCommand(
-			'structuredOpenEditors.closeFile',
-			closeFile,
-		),
-		vscode.commands.registerCommand(
-			'structuredOpenEditors.unpinEditor',
+			'openFilesExplorer.unpinEditor',
 			unpinEditor,
 		),
 		vscode.commands.registerCommand(
-			'structuredOpenEditors.closeFolder',
+			'openFilesExplorer.closeFolder',
 			closeFolder,
 		),
 	);

@@ -1,6 +1,6 @@
 {
-	"name": "structured-open-editors",
-	"displayName": "structured-open-editors",
+	"name": "open-files-explorer",
+	"displayName": "open-files-explorer",
 	"description": "",
 	"version": "0.0.1",
 	"publisher": "shouki-s",
@@ -8,22 +8,22 @@
 		"vscode": "^1.97.0"
 	},
 	"categories": ["Other"],
-	"activationEvents": ["onView:structuredOpenEditors"],
+	"activationEvents": ["onView:openFilesExplorer"],
 	"main": "./dist/extension.js",
 	"contributes": {
 		"commands": [
 			{
-				"command": "structuredOpenEditors.closeFile",
+				"command": "openFilesExplorer.closeFile",
 				"title": "Close",
 				"icon": "$(close)"
 			},
 			{
-				"command": "structuredOpenEditors.unpinEditor",
+				"command": "openFilesExplorer.unpinEditor",
 				"title": "Unpin",
 				"icon": "$(pinned)"
 			},
 			{
-				"command": "structuredOpenEditors.closeFolder",
+				"command": "openFilesExplorer.closeFolder",
 				"title": "Close All Editors in Folder",
 				"icon": "$(close-all)"
 			}
@@ -31,28 +31,28 @@
 		"views": {
 			"explorer": [
 				{
-					"id": "structuredOpenEditors",
-					"name": "Structured Open Editors",
+					"id": "openFilesExplorer",
+					"name": "Open Files Explorer",
 					"icon": "media/icon.svg",
-					"contextualTitle": "Structured Open Editors"
+					"contextualTitle": "Open Files Explorer"
 				}
 			]
 		},
 		"menus": {
 			"view/item/context": [
 				{
-					"command": "structuredOpenEditors.closeFile",
-					"when": "view == structuredOpenEditors && viewItem == file",
+					"command": "openFilesExplorer.closeFile",
+					"when": "view == openFilesExplorer && viewItem == file",
 					"group": "inline@1"
 				},
 				{
-					"command": "structuredOpenEditors.unpinEditor",
-					"when": "view == structuredOpenEditors && viewItem =~ /pinnedFile/",
+					"command": "openFilesExplorer.unpinEditor",
+					"when": "view == openFilesExplorer && viewItem =~ /pinnedFile/",
 					"group": "inline@2"
 				},
 				{
-					"command": "structuredOpenEditors.closeFolder",
-					"when": "view == structuredOpenEditors && viewItem == folder",
+					"command": "openFilesExplorer.closeFolder",
+					"when": "view == openFilesExplorer && viewItem == folder",
 					"group": "inline@1"
 				}
 			]
