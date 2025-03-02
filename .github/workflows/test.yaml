@@ -19,8 +19,11 @@ jobs:
       uses: actions/setup-node@v4
       with:
         node-version: 20.x
-    - run: npm install
-    - run: xvfb-run -a npm test
+    - uses: pnpm/action-setup@v2.2.2
+      with:
+        version: 10.4.1
+    - run: pnpm install --frozen-lockfile
+    - run: xvfb-run -a pnpm test
       if: runner.os == 'Linux'
-    - run: npm test
+    - run: pnpm test
       if: runner.os != 'Linux'
