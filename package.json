@@ -47,7 +47,7 @@
         },
         {
           "command": "openFilesExplorer.unpinEditor",
-          "when": "view == openFilesExplorer && viewItem =~ /pinnedFile/",
+          "when": "view == openFilesExplorer && viewItem == pinnedFile",
           "group": "inline@2"
         },
         {
