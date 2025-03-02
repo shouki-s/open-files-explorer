@@ -1,6 +1,6 @@
 # Open Files Explorer
 
-Open Files Explorerは、現在開いているファイルをワークスペースフォルダごとに整理して表示する専用のエクスプローラービューを提供するVisual Studio Code拡張機能です。
+Open Files Explorerは、現在開いているファイルを階層化してフォルダごとに整理して表示する専用のツリービューを提供するVisual Studio Code拡張機能です。
 
 ## 機能
 

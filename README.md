@@ -1,6 +1,6 @@
 # Open Files Explorer
 
-Open Files Explorer is a Visual Studio Code extension that provides a dedicated explorer view for your currently open files, organized by workspace folder.
+Open Files Explorer is a Visual Studio Code extension that provides a tree view for your currently open files, hierarchically organized by folder.
 
 ## Features
 
