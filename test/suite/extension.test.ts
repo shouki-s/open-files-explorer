@@ -12,7 +12,7 @@ suite('Extension Test Suite', function () {
 	setup(async () => {
 		// 拡張機能のアクティベーションを待機
 		const extension = vscode.extensions.getExtension(
-			'shouki-s.structured-open-editors',
+			'shouki-s.open-files-explorer',
 		);
 		if (!extension) {
 			throw new Error('Extension not found');
@@ -26,13 +26,13 @@ suite('Extension Test Suite', function () {
 	test('Tree View is registered', async () => {
 		// 拡張機能の存在を確認
 		const extension = vscode.extensions.getExtension(
-			'shouki-s.structured-open-editors',
+			'shouki-s.open-files-explorer',
 		);
 		assert.ok(extension, 'Extension should be registered');
 		assert.ok(extension.isActive, 'Extension should be active');
 
 		// ツリービューの存在を確認
-		const treeView = vscode.window.createTreeView('structuredOpenEditors', {
+		const treeView = vscode.window.createTreeView('openFilesExplorer', {
 			treeDataProvider: new OpenEditorsTreeProvider(),
 		});
 		assert.ok(treeView, 'Tree view should be created');
