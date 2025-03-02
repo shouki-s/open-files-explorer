@@ -14,7 +14,7 @@ export function activate(context: vscode.ExtensionContext): void {
 	context.subscriptions.push(treeView);
 }
 function registerEventHandlers(
-	treeDataProvider: OpenEditorsTreeProvider
+	treeDataProvider: OpenEditorsTreeProvider,
 ): void {
 	vscode.window.tabGroups.onDidChangeTabs(() => {
 		treeDataProvider.refresh();

@@ -18,12 +18,11 @@ export default class FileItem extends BaseItem {
 			arguments: [this.originalResourceUri],
 		};
 
-		// タブグループの情報を取得
-		const tabGroupIndex = this.tab.group
-			? vscode.window.tabGroups.all.indexOf(this.tab.group) + 1
-			: 0;
-
 		// descriptionを構築
+		this.setDescription();
+	}
+
+	private setDescription(): void {
 		this.description = '';
 		if (this.tab.isDirty) {
 			this.description += '●';
@@ -31,6 +30,9 @@ export default class FileItem extends BaseItem {
 		if (this.tab.isPinned) {
 			this.description += '†';
 		}
+		const tabGroupIndex = this.tab.group
+			? vscode.window.tabGroups.all.indexOf(this.tab.group) + 1
+			: 0;
 		if (vscode.window.tabGroups.all.length > 1 && tabGroupIndex > 0) {
 			this.description += `(Group ${tabGroupIndex})`;
 		}
