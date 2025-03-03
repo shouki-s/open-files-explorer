@@ -40,14 +40,6 @@ This extension does not add any settings yet.
 
 None at this time. If you encounter any issues, please report them on the [GitHub repository](https://github.com/shouki-s/open-files-explorer/issues).
 
-## Release Notes
-
-### 0.0.1
-
-- Initial release
-- Basic functionality for viewing open files by folder
-- Actions to close files, unpin editors, and close folders
-
 ## Contributing
 
 Contributions are welcome! Please feel free to submit a Pull Request.

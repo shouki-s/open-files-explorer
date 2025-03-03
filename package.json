@@ -1,9 +1,9 @@
 {
   "name": "open-files-explorer",
-  "displayName": "open-files-explorer",
-  "description": "",
+  "displayName": "Open Files Explorer",
+  "description": "Visual Studio Code extension that provides a tree view for your currently open files, hierarchically organized by folder",
   "repository": "https://github.com/shouki-s/open-files-explorer",
-  "version": "0.0.1",
+  "version": "1.0.0",
   "publisher": "shouki-s",
   "packageManager": "pnpm@10.4.1",
   "engines": {
