@@ -1,5 +1,10 @@
 import * as vscode from 'vscode'
-import { closeFile, closeFolder, unpinEditor } from './commands/editorCommands'
+import {
+  closeFile,
+  closeFolder,
+  collapseAll,
+  unpinEditor,
+} from './commands/editorCommands'
 import { OpenFilesTreeProvider } from './providers/openFilesTreeProvider'
 
 export function activate(context: vscode.ExtensionContext): void {
@@ -29,6 +34,10 @@ function registerCommands(context: vscode.ExtensionContext): void {
     vscode.commands.registerCommand(
       'openFilesExplorer.closeFolder',
       closeFolder,
+    ),
+    vscode.commands.registerCommand(
+      'openFilesExplorer.collapseAll',
+      collapseAll,
     ),
   )
 }

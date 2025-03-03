@@ -3,6 +3,12 @@ import type FileItem from '../items/fileItem'
 import type FolderItem from '../items/folderItem'
 import { findTab } from '../utils/tabUtils'
 
+export async function collapseAll(): Promise<void> {
+  await vscode.commands.executeCommand(
+    'workbench.actions.treeView.openFilesExplorer.collapseAll',
+  )
+}
+
 export async function closeFile(item: FileItem): Promise<void> {
   const tab = findTab(item.originalResourceUri)
   if (tab) {

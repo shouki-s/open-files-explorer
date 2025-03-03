@@ -15,6 +15,11 @@
   "contributes": {
     "commands": [
       {
+        "command": "openFilesExplorer.collapseAll",
+        "title": "%openFilesExplorer.collapseAll.title%",
+        "icon": "$(collapse-all)"
+      },
+      {
         "command": "openFilesExplorer.closeFile",
         "title": "%openFilesExplorer.closeFile.title%",
         "icon": "$(close)"
@@ -41,6 +46,13 @@
       ]
     },
     "menus": {
+      "view/title": [
+        {
+          "command": "openFilesExplorer.collapseAll",
+          "when": "view == openFilesExplorer",
+          "group": "navigation"
+        }
+      ],
       "view/item/context": [
         {
           "command": "openFilesExplorer.closeFile",
