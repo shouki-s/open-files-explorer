@@ -33,9 +33,7 @@ export default class FileItem extends BaseItem {
       ? vscode.window.tabGroups.all.indexOf(this.tab.group) + 1
       : 0
     if (vscode.window.tabGroups.all.length > 1 && tabGroupIndex > 0) {
-      this.description += vscode.l10n.t('openFilesExplorer.group.label', {
-        0: tabGroupIndex,
-      })
+      this.description += vscode.l10n.t('(Group {0})', tabGroupIndex)
     }
   }
 }

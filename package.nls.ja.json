@@ -3,6 +3,5 @@
   "openFilesExplorer.contextualTitle": "Open Files Explorer",
   "openFilesExplorer.closeFile.title": "閉じる",
   "openFilesExplorer.unpinEditor.title": "エディターの固定を解除する",
-  "openFilesExplorer.closeFolder.title": "フォルダ内のすべてのエディタを閉じる",
-  "openFilesExplorer.group.label": "(グループ {0})"
+  "openFilesExplorer.closeFolder.title": "フォルダ内のすべてのエディタを閉じる"
 }
