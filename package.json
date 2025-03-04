@@ -3,13 +3,14 @@
   "displayName": "Open Files Explorer",
   "description": "A tree view for your currently open files, hierarchically organized by folder",
   "repository": "https://github.com/shouki-s/open-files-explorer",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "publisher": "shouki-s",
   "packageManager": "pnpm@10.4.1",
   "engines": {
     "vscode": "^1.96.0"
   },
   "categories": ["Other"],
+  "icon": "media/icon.png",
   "activationEvents": ["onView:openFilesExplorer"],
   "main": "./dist/extension.js",
   "contributes": {
