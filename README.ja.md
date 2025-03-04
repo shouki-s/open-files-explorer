@@ -9,7 +9,7 @@ Open Files Explorerは、現在開いているファイルを階層化してフ�
 - **クイックアクション**: エクスプローラーから直接ファイルを閉じたり、エディターのピン留めを解除したりできます
 - **ワークスペースサポート**: マルチルートワークスペースに対応しています
 
-![Open Files Explorer](media/screenshot.png)
+![Open Files Explorer](https://github.com/shouki-s/open-files-explorer/blob/main/media/screenshot.png)
 
 ## 使い方
 
