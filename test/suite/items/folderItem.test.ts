@@ -3,7 +3,7 @@ import * as vscode from 'vscode'
 import FileItem from '../../../src/items/fileItem'
 import FolderItem from '../../../src/items/folderItem'
 import type { UriTab } from '../../../src/utils/tabUtils'
-import { toOpenedFileUri } from '../../../src/utils/uriUtils'
+
 suite('FolderItem Test Suite', () => {
   test('FolderItem is correctly initialized', () => {
     const uri = vscode.Uri.file('/test/folder')
@@ -13,7 +13,7 @@ suite('FolderItem Test Suite', () => {
     const folderItem = new FolderItem(uri, label, children)
 
     assert.strictEqual(folderItem.label, label)
-    assert.deepStrictEqual(folderItem.resourceUri, toOpenedFileUri(uri))
+    assert.deepStrictEqual(folderItem.resourceUri, uri)
     assert.strictEqual(
       folderItem.collapsibleState,
       vscode.TreeItemCollapsibleState.Expanded,

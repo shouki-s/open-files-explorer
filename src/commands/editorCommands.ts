@@ -10,14 +10,14 @@ export async function collapseAll(): Promise<void> {
 }
 
 export async function closeFile(item: FileItem): Promise<void> {
-  const tab = findTab(item.originalResourceUri)
+  const tab = findTab(item.resourceUri)
   if (tab) {
     await vscode.window.tabGroups.close(tab)
   }
 }
 
 export async function unpinEditor(item: FileItem): Promise<void> {
-  const tab = findTab(item.originalResourceUri)
+  const tab = findTab(item.resourceUri)
   if (tab?.input instanceof vscode.TabInputText) {
     await vscode.commands.executeCommand(
       'workbench.action.unpinEditor',
@@ -32,7 +32,7 @@ export async function closeFolder(item: FolderItem): Promise<void> {
     .filter(
       (tab) =>
         tab.input instanceof vscode.TabInputText &&
-        tab.input.uri.fsPath.startsWith(item.originalResourceUri.fsPath) &&
+        tab.input.uri.fsPath.startsWith(item.resourceUri.fsPath) &&
         !tab.isPinned,
     )
   await vscode.window.tabGroups.close(tabsToClose)

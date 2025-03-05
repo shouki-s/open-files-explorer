@@ -15,7 +15,7 @@ export default class FileItem extends BaseItem {
     this.command = {
       command: 'vscode.open',
       title: 'Open File',
-      arguments: [this.originalResourceUri],
+      arguments: [this.resourceUri],
     }
 
     this.setDescription()

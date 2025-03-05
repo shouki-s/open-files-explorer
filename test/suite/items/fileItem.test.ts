@@ -2,7 +2,6 @@ import * as assert from 'node:assert'
 import * as vscode from 'vscode'
 import FileItem from '../../../src/items/fileItem'
 import type { UriTab } from '../../../src/utils/tabUtils'
-import { toOpenedFileUri } from '../../../src/utils/uriUtils'
 
 suite('FileItem Test Suite', () => {
   test('FileItem is correctly initialized', () => {
@@ -17,7 +16,7 @@ suite('FileItem Test Suite', () => {
     const fileItem = new FileItem(uri, label, tab)
 
     assert.strictEqual(fileItem.label, label)
-    assert.deepStrictEqual(fileItem.resourceUri, toOpenedFileUri(uri))
+    assert.deepStrictEqual(fileItem.resourceUri, uri)
     assert.strictEqual(
       fileItem.collapsibleState,
       vscode.TreeItemCollapsibleState.None,
