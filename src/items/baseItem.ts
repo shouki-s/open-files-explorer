@@ -7,6 +7,8 @@ export enum Context {
 }
 
 export default abstract class BaseItem extends vscode.TreeItem {
+  public parent: BaseItem | null = null
+
   constructor(
     public readonly resourceUri: vscode.Uri,
     public readonly label: string,
