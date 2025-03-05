@@ -1,5 +1,10 @@
 # Change Log
 
+### [1.0.3] 2025-03-05
+
+- Active file tracking
+- Simplified internal data structure for better performance
+
 ### [1.0.2] 2025-03-04
 
 - Added icon
