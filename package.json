@@ -9,13 +9,9 @@
   "engines": {
     "vscode": "^1.96.0"
   },
-  "categories": [
-    "Other"
-  ],
+  "categories": ["Other"],
   "icon": "media/icon.png",
-  "activationEvents": [
-    "onView:openFilesExplorer"
-  ],
+  "activationEvents": ["onView:openFilesExplorer"],
   "main": "./dist/extension.js",
   "contributes": {
     "commands": [
@@ -105,14 +101,7 @@
     "vsce": "^2.15.0"
   },
   "pnpm": {
-    "ignoredBuiltDependencies": [
-      "@biomejs/biome",
-      "esbuild"
-    ],
-    "onlyBuiltDependencies": [
-      "@biomejs/biome",
-      "esbuild",
-      "keytar"
-    ]
+    "ignoredBuiltDependencies": ["@biomejs/biome", "esbuild"],
+    "onlyBuiltDependencies": ["@biomejs/biome", "esbuild", "keytar"]
   }
 }
