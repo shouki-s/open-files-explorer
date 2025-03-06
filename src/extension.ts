@@ -31,7 +31,7 @@ function registerEventHandlers(
   })
   vscode.window.onDidChangeActiveTextEditor((editor) => {
     const activeTab = vscode.window.tabGroups.activeTabGroup.activeTab
-    if (!editor || !activeTab || !isUriTab(activeTab)) {
+    if (!editor || !treeView.visible || !activeTab || !isUriTab(activeTab)) {
       return
     }
     const fileItem = treeDataProvider.findFileItem(activeTab.input.uri)
