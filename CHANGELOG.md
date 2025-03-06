@@ -1,5 +1,10 @@
 # Change Log
 
+## [1.0.4] 2025-03-06
+
+- Enhanced active file tracking to only operate when tree view is visible
+- Developer experience improvements
+
 ### [1.0.3] 2025-03-05
 
 - Active file tracking
